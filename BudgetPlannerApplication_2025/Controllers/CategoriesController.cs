@@ -7,11 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BudgetPlannerApplication_2025.EFDataBase.Appointment.EF;
 using BudgetPlannerApplication_2025.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BudgetPlannerApplication_2025.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CategoriesController : ControllerBase
     {
         private readonly AppDbContext _context;

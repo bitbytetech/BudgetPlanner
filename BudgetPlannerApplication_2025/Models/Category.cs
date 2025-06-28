@@ -11,6 +11,7 @@ namespace BudgetPlannerApplication_2025.Models
         public int UniqueId { get; set; }
         [Required]
         public string Name { get; set; } = string.Empty;
+        public int ParentId { get; set; }
         public string Description { get; set; } = string.Empty;
         public DateTime CreatedDate { get; set; }
         public DateTime LastUpdatedDate { get; set; }
