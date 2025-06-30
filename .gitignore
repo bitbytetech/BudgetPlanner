@@ -1,3 +1,5 @@
 /BudgetPlannerApi/obj/
 /.vs/
 /BudgetPlannerApi/bin/
+
+.fake
