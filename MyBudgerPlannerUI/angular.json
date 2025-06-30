@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "MyBudgerPlannerUI": {
+    "MyBudgetPlanner": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,11 +17,12 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/my-budger-planner-ui",
+            "outputPath": "dist/my-budget-planner",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
-              "zone.js"
+              "zone.js",
+              "@angular/localize/init"
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
@@ -34,12 +35,7 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": [],
-            "server": "src/main.server.ts",
-            "outputMode": "server",
-            "ssr": {
-              "entry": "src/server.ts"
-            }
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -69,10 +65,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "MyBudgerPlannerUI:build:production"
+              "buildTarget": "MyBudgetPlanner:build:production"
             },
             "development": {
-              "buildTarget": "MyBudgerPlannerUI:build:development"
+              "buildTarget": "MyBudgetPlanner:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -85,7 +81,8 @@
           "options": {
             "polyfills": [
               "zone.js",
-              "zone.js/testing"
+              "zone.js/testing",
+              "@angular/localize/init"
             ],
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
@@ -105,6 +102,6 @@
     }
   },
   "cli": {
-    "analytics": "7c5c7f55-dcc1-4da7-9cea-679d2d6f9a05"
+    "analytics": false
   }
 }
