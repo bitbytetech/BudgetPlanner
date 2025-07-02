@@ -35,6 +35,9 @@ export class LoginComponent {
       this.userService.loginUser(this.loginForm.value).subscribe({
         next: (response) => {
           console.log('Login response:', response);
+              localStorage.setItem('authData', JSON.stringify(response)); // ✅ Store full response object
+              // redirect to dashboard or other page
+
           this.isLoading.set(false);
           if (response && response.success) {
             this.notification.set('Login successful!');
