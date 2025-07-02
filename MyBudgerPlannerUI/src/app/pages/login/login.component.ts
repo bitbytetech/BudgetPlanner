@@ -20,7 +20,7 @@ export class LoginComponent {
 
   constructor(private fb: FormBuilder, private userService: UserRegistrationServiceTsService, private router: Router) {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      loginName: ['', [Validators.required, Validators.email]],
       password: ['',  
         [Validators.required ,
           Validators.minLength(6),
@@ -34,6 +34,7 @@ export class LoginComponent {
       this.notification.set(null);
       this.userService.loginUser(this.loginForm.value).subscribe({
         next: (response) => {
+          console.log('Login response:', response);
           this.isLoading.set(false);
           if (response && response.success) {
             this.notification.set('Login successful!');

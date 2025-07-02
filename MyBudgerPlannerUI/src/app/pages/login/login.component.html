@@ -15,14 +15,14 @@
             <div class="row mb-3">
               
               <div class="col-md-12">
-                <label for="email" class="form-label small">Email*</label>
-                <input type="email" id="email" class="form-control form-control-sm" formControlName="email">
-                  <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="text-danger small">
-                    <span *ngIf="loginForm.get('email')?.errors?.['required']">Email is required.</span>
-                    <span *ngIf="loginForm.get('email')?.errors?.['email']">Invalid email format.</span>
+                <label for="loginName" class="form-label small">Email*</label>
+                <input type="loginName" id="loginName" class="form-control form-control-sm" formControlName="loginName">
+                  <div *ngIf="loginForm.get('loginName')?.invalid && loginForm.get('loginName')?.touched" class="text-danger small">
+                    <span *ngIf="loginForm.get('loginName')?.errors?.['required']">Email is required.</span>
+                    <span *ngIf="loginForm.get('loginName')?.errors?.['loginName']">Invalid email format.</span>
                   </div>
-                  <div *ngIf="loginForm.get('email')?.valid" class="text-success small">
-                    <span>L     ooks good!</span>
+                  <div *ngIf="loginForm.get('loginName')?.valid" class="text-success small">
+                    <span>Looks good!</span>
                   </div>
                   <span>
                     <i class="bi bi-check-circle-fill text-success"></i>

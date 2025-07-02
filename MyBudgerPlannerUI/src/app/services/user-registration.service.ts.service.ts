@@ -7,8 +7,7 @@ import { UserRegistrationModel, RegistrationResponseModel } from '../models/User
   providedIn: 'root'
 })
 export class UserRegistrationServiceTsService {
-  private loginUrl = 'http://mbp.bitprosofttech.com/api/UserAccount/Login';
-
+  private loginUrl = 'http://mbp.bitprosofttech.com/api/UserAccount/Login'; 
   loginUser(credentials: { email: string; password: string }): Observable<any> {
     var loginRequest = this.http.post<any>(this.loginUrl, credentials);
     console.log('Login request:', loginRequest);
