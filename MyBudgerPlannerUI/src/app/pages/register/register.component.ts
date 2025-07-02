@@ -28,7 +28,7 @@ export class RegisterComponent {
       email: ['Ankit.sahay1@example.com', [Validators.required, Validators.email, Validators.maxLength(100)]],
       password: ['Ankit.sahay1@example.com', [
         Validators.required,
-        Validators.minLength(8),
+        Validators.minLength(6),
         Validators.maxLength(30),
         this.createPasswordStrengthValidator()
       ]],

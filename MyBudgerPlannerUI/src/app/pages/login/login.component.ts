@@ -1,8 +1,9 @@
 
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { UserRegistrationServiceTsService } from '../../services/user-registration.service.ts.service';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -13,19 +14,42 @@ import { CommonModule } from '@angular/common';
 })
 export class LoginComponent {
   loginForm: FormGroup;
+  notification = signal<string | null>(null);
+  isSuccess = signal(false);
+  isLoading = signal(false);
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(private fb: FormBuilder, private userService: UserRegistrationServiceTsService, private router: Router) {
     this.loginForm = this.fb.group({
-      email: ['', Validators.required],
-      password: ['', Validators.required]
+      email: ['', [Validators.required, Validators.email]],
+      password: ['',  
+        [Validators.required ,
+          Validators.minLength(6),
+         ]]
     });
   }
-
+ 
   onSubmit() {
     if (this.loginForm.valid) {
-      console.log('Login Data', this.loginForm.value);
-      // Add your authentication logic here
-      this.router.navigate(['/']);
+      this.isLoading.set(true);
+      this.notification.set(null);
+      this.userService.loginUser(this.loginForm.value).subscribe({
+        next: (response) => {
+          this.isLoading.set(false);
+          if (response && response.success) {
+            this.notification.set('Login successful!');
+            this.isSuccess.set(true);
+            setTimeout(() => this.router.navigate(['/']), 1000);
+          } else {
+            this.notification.set(response?.message || 'Login failed. Please check your credentials.');
+            this.isSuccess.set(false);
+          }
+        },
+        error: (err) => {
+          this.isLoading.set(false);
+          this.notification.set('Something went wrong. Please try again.');
+          this.isSuccess.set(false);
+        }
+      });
     }
   }
 }
