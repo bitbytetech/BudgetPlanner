@@ -5,3 +5,4 @@
 .fake
 ./package-lock.json
 MyBudgerPlannerUI/package-lock.json
+BudgetPlannerApi/publish/
