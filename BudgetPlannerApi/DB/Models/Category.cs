@@ -16,14 +16,14 @@ namespace BudgetPlannerApplication_2025.Models
 
         public int? ParentId { get; set; } // Should be nullable to allow top-level categories
 
-        public string Description { get; set; } = string.Empty;
+        public string ?Description { get; set; } = string.Empty;
 
-        public DateTime CreatedDate { get; set; }
+        public DateTime ?CreatedDate { get; set; }
 
-        public DateTime LastUpdatedDate { get; set; }
+        public DateTime ?LastUpdatedDate { get; set; }
 
         // Foreign key property
-        public int UserId { get; set; }
+        public int ?UserId { get; set; }
 
         // Navigation property to User
         [ForeignKey("UserId")]

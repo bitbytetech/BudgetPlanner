@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
- using BudgetPlannerApplication_2025.Models;
+using BudgetPlannerApplication_2025.Models;
 using Microsoft.AspNetCore.Authorization;
 using Bpst.API.DB;
 
@@ -23,11 +23,22 @@ namespace BudgetPlannerApplication_2025.Controllers
             _context = context;
         }
 
+        // Helper to get logged-in user id from claims
+        private int? GetLoggedInUserId()
+        {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+            if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
+                return userId;
+            return null;
+        }
+
         // GET: api/Categories
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
         {
-            return await _context.Categories.ToListAsync();
+            var userId = GetLoggedInUserId();
+            var data = await _context.Categories.Where(c => c.UserId.Equals(userId)).ToListAsync();
+            return Ok(data);
         }
 
         // GET: api/Categories/5
@@ -44,12 +55,16 @@ namespace BudgetPlannerApplication_2025.Controllers
             return category;
         }
 
-
         [HttpPost("CreateOrEdit")]
         public async Task<IActionResult> CreateOrEditCategory(Category category)
         {
             if (category == null)
                 return BadRequest("Invalid category data.");
+
+            var userId = GetLoggedInUserId();
+            if (userId == null)
+                return Unauthorized("User ID not found in token.");
+            category.UserId = userId;
 
             var existingCategory = await _context.Categories
                 .AsNoTracking()
@@ -57,15 +72,15 @@ namespace BudgetPlannerApplication_2025.Controllers
 
             if (existingCategory == null)
             {
-                // Add new category
+                category.CreatedDate = DateTime.UtcNow;
                 _context.Categories.Add(category);
                 await _context.SaveChangesAsync();
 
                 return CreatedAtAction(nameof(GetCategory), new { id = category.UniqueId }, category);
             }
-            else
+            else if (userId == existingCategory.UserId)
             {
-                // Update existing category
+                category.LastUpdatedDate = DateTime.UtcNow;
                 _context.Entry(category).State = EntityState.Modified;
 
                 try
@@ -86,8 +101,11 @@ namespace BudgetPlannerApplication_2025.Controllers
 
                 return Ok(category);
             }
+            else
+            {
+                return Forbid("You do not have permission to edit this category.");
+            }
         }
-
 
         // DELETE: api/Categories/5
         [HttpDelete("{id}")]
