@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UserRegistrationModel, RegistrationResponseModel } from '../models/UserRegistrationModel';
+import { ApiEndpoints } from '../core/constants/api-endpoints';
 
 @Injectable({
   providedIn: 'root'
@@ -9,18 +10,18 @@ import { UserRegistrationModel, RegistrationResponseModel } from '../models/User
 export class UserRegistrationServiceTsService {
 
 
-  private loginUrl = 'http://mbp.bitprosofttech.com/api/UserAccount/Login'; 
+  private loginUrl = 'http://mbp.bitprosofttech.com/api/UserAccount/Login';
   private apiUrl = 'http://mbp.bitprosofttech.com/api/UserAccount/UserRegistration';
 
   loginUser(credentials: { email: string; password: string }): Observable<any> {
-    var loginRequest = this.http.post<any>(this.loginUrl, credentials);
+    var loginRequest = this.http.post<any>(ApiEndpoints.userAccount.login, credentials);
     console.log('Login request:', loginRequest);
     return loginRequest;
   }
   constructor(private http: HttpClient) { }
 
   registerUser(user: UserRegistrationModel): Observable<RegistrationResponseModel> {
-    return this.http.post<RegistrationResponseModel>(this.apiUrl, user);
+    return this.http.post<RegistrationResponseModel>(ApiEndpoints.userAccount.UserRegistration, user);
   }
 
 

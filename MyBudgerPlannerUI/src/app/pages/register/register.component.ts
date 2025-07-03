@@ -14,14 +14,14 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractContro
 })
 export class RegisterComponent {
   registerForm: FormGroup;
-   isSuccess = signal(false); // Using signal for isSuccess state
+  isSuccess = signal(false); // Using signal for isSuccess state
   notificationMessage = signal<string | null>(null); // For displaying notification messages
 
 
   // Define the form controls and their initial values
 
-  constructor(private fb: FormBuilder, private userService: UserRegistrationServiceTsService, private router: Router) { 
-     this.registerForm = this.fb.group({
+  constructor(private fb: FormBuilder, private userService: UserRegistrationServiceTsService, private router: Router) {
+    this.registerForm = this.fb.group({
       firstName: ['Ankit', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
       lastName: ['Sahay', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
       phoneNumber: ['9999999999', [Validators.required, Validators.pattern(/^[0-9]{10,15}$/)]],
@@ -46,8 +46,8 @@ export class RegisterComponent {
       const hasUpperCase = /[A-Z]/.test(value);
       const hasLowerCase = /[a-z]/.test(value);
       const hasNumeric = /[0-9]/.test(value);
-      const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(value); 
-      const passwordValid = hasUpperCase && hasLowerCase && hasNumeric && hasSpecialChar; 
+      const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(value);
+      const passwordValid = hasUpperCase && hasLowerCase && hasNumeric && hasSpecialChar;
       return !passwordValid ? { passwordStrength: true } : null;
     };
   }
@@ -57,19 +57,19 @@ export class RegisterComponent {
     const password = formGroup.get('password')?.value;
     const confirmPassword = formGroup.get('confirmPassword')?.value;
 
-    return password && confirmPassword && password !== confirmPassword 
-      ? { passwordMismatch: true } 
+    return password && confirmPassword && password !== confirmPassword
+      ? { passwordMismatch: true }
       : null;
   };
 
- 
+
   onSubmit() {
     if (this.registerForm.valid) {
-console.log('Form Submitted', this.registerForm.value);
+      console.log('Form Submitted', this.registerForm.value);
       const formValue = this.registerForm.value;
       const user: UserRegistrationModel = {
         ...formValue,
-        roles: formValue.roles ? formValue.roles.split(',').map((role: string) => role.trim()) : [] 
+        roles: formValue.roles ? formValue.roles.split(',').map((role: string) => role.trim()) : []
       };
 
       this.userService.registerUser(user).subscribe({

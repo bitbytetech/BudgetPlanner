@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthTokenService {
 
-  constructor() { }  
-  
+  constructor() { }
+
   getAuthData(): any {
     const authData = localStorage.getItem('authData');
     return authData ? JSON.parse(authData) : null;
