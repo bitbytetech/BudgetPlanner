@@ -9,7 +9,7 @@ export class AuthTokenService {
   constructor() { }
 
   getAuthData(): any {
-    const authData = localStorage.getItem('authData');
+    const authData = localStorage.getItem('userTokenData');
     return authData ? JSON.parse(authData) : null;
   }
 

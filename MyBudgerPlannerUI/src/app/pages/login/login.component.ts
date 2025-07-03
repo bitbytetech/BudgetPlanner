@@ -1,4 +1,3 @@
-
 import { Component, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -34,10 +33,6 @@ export class LoginComponent {
       this.notification.set(null);
       this.userService.loginUser(this.loginForm.value).subscribe({
         next: (response) => {
-          console.log('Login response:', response);
-          localStorage.setItem('authData', JSON.stringify(response)); // ✅ Store full response object
-          // redirect to dashboard or other page
-
           this.isLoading.set(false);
           if (response && response.isLoginSuccess) {
             this.notification.set('Login successful!');

@@ -1,19 +1,21 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { UserRegistrationModel, RegistrationResponseModel } from '../models/UserRegistrationModel';
 
+import { ApiEndpoints } from '../core/constants/api-endpoints';
 @Injectable({ providedIn: 'root' })
 
 export class CategoryService {
-   constructor(private http: HttpClient) { }
-  private _urls = {
-    categoriesUrl: 'http://mbp.bitprosofttech.com/api/Categories',
+  constructor(private http: HttpClient) { }
 
-  };
-  
-  loginUser(credentials: { email: string; password: string }): Observable<any> {
-     return this.http.get<any>(this._urls.categoriesUrl);
-   }
+
+  getAllCategories(): Observable<any> {
+    return this.http.get<any>(ApiEndpoints.Categories.getAllCategories).pipe(
+      tap(response => {
+        console.log('Fetched categories:', response);
+        // Handle the response if needed
+      })
+    );
+  }
 }
- 

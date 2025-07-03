@@ -7,7 +7,7 @@ export const ApiEndpoints = {
         UserRegistration: `${ApiBaseUrl}/UserAccount/UserRegistration`,
     },
     Categories: {
-        getAllCategories: `${ApiBaseUrl}/'Categories`,
+        getAllCategories: `${ApiBaseUrl}/Categories`,
         getCategoriesById: (id: number) => `${ApiBaseUrl}/Categories/${id}  `,
     },
     // Add more modules here
