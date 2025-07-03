@@ -45,8 +45,9 @@ namespace BudgetPlannerApplication_2025.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Category>> GetCategory(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
-
+            var userId = GetLoggedInUserId();
+            var category = await _context.Categories.Where(c => c.UserId == userId).FirstOrDefaultAsync();
+             
             if (category == null)
             {
                 return NotFound();
