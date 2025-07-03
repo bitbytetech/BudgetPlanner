@@ -10,7 +10,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractContro
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],  
+  imports: [CommonModule, ReactiveFormsModule],
 })
 export class LoginComponent {
   loginForm: FormGroup;
@@ -21,13 +21,13 @@ export class LoginComponent {
   constructor(private fb: FormBuilder, private userService: UserRegistrationServiceTsService, private router: Router) {
     this.loginForm = this.fb.group({
       loginName: ['', [Validators.required, Validators.email]],
-      password: ['',  
-        [Validators.required ,
-          Validators.minLength(6),
-         ]]
+      password: ['',
+        [Validators.required,
+        Validators.minLength(6),
+        ]]
     });
   }
- 
+
   onSubmit() {
     if (this.loginForm.valid) {
       this.isLoading.set(true);
@@ -35,11 +35,11 @@ export class LoginComponent {
       this.userService.loginUser(this.loginForm.value).subscribe({
         next: (response) => {
           console.log('Login response:', response);
-              localStorage.setItem('authData', JSON.stringify(response)); // ✅ Store full response object
-              // redirect to dashboard or other page
+          localStorage.setItem('authData', JSON.stringify(response)); // ✅ Store full response object
+          // redirect to dashboard or other page
 
           this.isLoading.set(false);
-          if (response && response.success) {
+          if (response && response.isLoginSuccess) {
             this.notification.set('Login successful!');
             this.isSuccess.set(true);
             setTimeout(() => this.router.navigate(['/']), 1000);
