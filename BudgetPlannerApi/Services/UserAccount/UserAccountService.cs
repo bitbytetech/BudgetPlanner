@@ -129,6 +129,7 @@ namespace Bpst.API.Services.UserAccount
             response.Mobile = _appUser.PhoneNumber;
             response.UserId = _appUser.UniqueId.ToString();
             response.Token = CreateJwtToken(_appUser);
+            response.IssuedAt = DateTime.UtcNow;
             response.userRoles = await GetUserRole(_appUser.LoginEmail);
         }
         private async Task<List<Roles>?> GetUserRole(string loginEmail)

@@ -14,12 +14,7 @@ namespace Bpst.API.ViewModels
         public string LName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Mobile { get; set; } = string.Empty;
-        public string UserGroups { get; set; } = string.Empty;
-        public string DivisionName { get; set; } = string.Empty;
-        public string DivisionDescription { get; set; } = string.Empty;
-        public string DepartmentName { get; set; } = string.Empty;
-        public string DepartmentDescription { get; set; } = string.Empty;
-        public Guid DivisionId { get; set; }
-        public Guid DepartmentId { get; set; }
+        public string FullName => $"{FName} {LName}";
+         public DateTime IssuedAt { get;   set; }
     }
 }

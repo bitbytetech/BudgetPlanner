@@ -1,5 +1,6 @@
 ﻿using BudgetPlannerApi.DB.Models.Address;
 using BudgetPlannerApi.DB.Models.User;
+using BudgetPlannerApplication_2025.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bpst.API.DB
@@ -11,6 +12,15 @@ namespace Bpst.API.DB
             modelBuilder.Entity<Roles>().HasData(
                 new Roles() { UniqueId = 1, RoleName = "Admin" },
                 new Roles() { UniqueId = 2, RoleName = "User" }
+                );
+        }
+        public static void SeedCategory(this ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Category>().HasData( 
+                new Category() { UniqueId = 1, Name = "Transport", },
+                new Category() { UniqueId = 2, Name = "Grocery" },
+                new Category() { UniqueId = 3, Name = "Electronics" },
+                new Category() { UniqueId = 4, Name = "Miscellaneous" }
                 );
         }
 

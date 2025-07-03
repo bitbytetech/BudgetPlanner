@@ -14,6 +14,7 @@ namespace Bpst.API.DB
             modelBuilder.SeedCountry();
             modelBuilder.SeedState();
             modelBuilder.SeedCities();
+            modelBuilder.SeedCategory();
             modelBuilder.Entity<Category>()
                 .HasOne(c => c.ParentCategory)
                 .WithMany(c => c.SubCategories)
