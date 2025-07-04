@@ -6,7 +6,7 @@
     "mbp": {
       "projectType": "application",
       "schematics": {
-        "@schematics/angular:component": {
+        "@schematics/angular:component": { 
           "style": "scss"
         }
       },
