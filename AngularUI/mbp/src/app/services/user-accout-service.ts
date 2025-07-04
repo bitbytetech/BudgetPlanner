@@ -14,9 +14,9 @@ export class UserAccoutService {
 
  
 
-  loginUser(credentials: { email: string; password: string }): Observable<any> {
+  loginUser(credentials: { loginName: string; password: string }): Observable<any> {
     return this.http.post<any>(ApiEndpoints.userAccount.login, credentials).pipe(
-      tap(response => {
+      tap(response => {console.log('Login response:', response);
         // Store the authentication data in local storage if login is successful
         if (response && response.isLoginSuccess) {
           localStorage.setItem('userTokenData', JSON.stringify(response));

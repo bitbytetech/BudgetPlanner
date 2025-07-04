@@ -82,7 +82,14 @@ export class Register {
             this.notificationMessage.set(response.successMessages?.join(', ') || 'Registration Successful!');
             this.isSuccess.set(true);
             this.registerForm.reset();
-            setTimeout(() => this.router.navigate(['/login']), 2000);
+            // Automatically log in the user after successful registration 
+            this.userService.loginUser({loginName: user.email,password: user.password}).subscribe({
+              next: (response) => {
+                console.log('Login Response:', response);
+                setTimeout(() => this.router.navigate(['/home']), 2000);
+              }
+            });
+
           } else {
             this.notificationMessage.set(response.errorMessages?.join(', ') || 'Registration Failed');
             this.isSuccess.set(false);
