@@ -4,6 +4,8 @@ import { Router, RouterModule } from '@angular/router';
 // import { UserRegistrationServiceTsService } from '../../services/user-registration.service.ts.service';
 // import { UserRegistrationModel } from '../../models/UserRegistrationModel'; // Import the UserRegistrationModel;
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { UserRegistrationModel } from '../../models/UserRegistrationModel';
+import { UserAccoutService } from '../../services/user-accout-service';
 
 @Component({
   selector: 'app-register',
@@ -21,7 +23,7 @@ export class Register {
 
   // Define the form controls and their initial values
 
-  constructor(private fb: FormBuilder,   private router: Router) {
+  constructor(private fb: FormBuilder,   private userService: UserAccoutService, private router: Router) {
     this.registerForm = this.fb.group({
       firstName: ['Ankit', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
       lastName: ['Sahay', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
@@ -42,8 +44,7 @@ export class Register {
   private createPasswordStrengthValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = control.value;
-      if (!value) return null;
-
+      if (!value) return null; 
       const hasUpperCase = /[A-Z]/.test(value);
       const hasLowerCase = /[a-z]/.test(value);
       const hasNumeric = /[0-9]/.test(value);
@@ -57,16 +58,40 @@ export class Register {
   private passwordMatchValidator: ValidatorFn = (formGroup: AbstractControl): ValidationErrors | null => {
     const password = formGroup.get('password')?.value;
     const confirmPassword = formGroup.get('confirmPassword')?.value;
-
     return password && confirmPassword && password !== confirmPassword
       ? { passwordMismatch: true }
       : null;
   };
 
 
+  
   onSubmit() {
     if (this.registerForm.valid) {
       console.log('Form Submitted', this.registerForm.value);
+      const formValue = this.registerForm.value;
+      const user: UserRegistrationModel = {
+        ...formValue,
+        roles: formValue.roles ? formValue.roles.split(',').map((role: string) => role.trim()) : []
+      };
+
+      this.userService.registerUser(user).subscribe({
+        next: (response) => {
+          console.log('Registration Response:', response);
+          if (response.isCreated) {
+            this.notificationMessage.set(response.successMessages?.join(', ') || 'Registration Successful!');
+            this.isSuccess.set(true);
+            this.registerForm.reset();
+            setTimeout(() => this.router.navigate(['/login']), 2000);
+          } else {
+            this.notificationMessage.set(response.errorMessages?.join(', ') || 'Registration Failed');
+            this.isSuccess.set(false);
+          }
+        },
+        error: (err) => {
+          this.notificationMessage.set('Something went wrong. Please try again.');
+          this.isSuccess.set(false);
+        }
+      });
     }
   }
 }
