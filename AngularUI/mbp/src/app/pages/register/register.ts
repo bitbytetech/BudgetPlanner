@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
 // import { UserRegistrationServiceTsService } from '../../services/user-registration.service.ts.service';
 // import { UserRegistrationModel } from '../../models/UserRegistrationModel'; // Import the UserRegistrationModel;
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
@@ -9,7 +10,7 @@ import { UserAccoutService } from '../../services/user-accout-service';
 
 @Component({
   selector: 'app-register',
-  imports: [CommonModule, ReactiveFormsModule,RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, HttpClientModule],
   templateUrl: './register.html',
   styleUrl: './register.scss'
 })
