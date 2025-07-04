@@ -7,3 +7,5 @@
 MyBudgerPlannerUI/package-lock.json
 BudgetPlannerApi/publish/
 /AngularUI/node_modules/
+MyBudgerPlannerUI/.angular/
+MyBudgerPlannerUI/node_modules/
