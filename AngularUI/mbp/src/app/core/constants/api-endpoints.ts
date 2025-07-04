@@ -11,6 +11,7 @@ export const ApiEndpoints = {
     Categories: {
         getAllCategories: `${ApiBaseUrl}/Categories`,
         getCategoriesById: (id: number) => `${ApiBaseUrl}/Categories/${id}  `,
+        SaveCategories: `${ApiBaseUrl}/Categories/CreateOrEdit`
     },
     // Add more modules here
 };
