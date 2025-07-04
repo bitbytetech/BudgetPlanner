@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { UserRegistrationModel, RegistrationResponseModel } from '../models/UserRegistrationModel';
 import { ApiEndpoints } from '../core/constants/api-endpoints';
 
@@ -10,14 +11,17 @@ import { ApiEndpoints } from '../core/constants/api-endpoints';
 export class UserRegistrationServiceTsService {
 
 
-  private loginUrl = 'http://mbp.bitprosofttech.com/api/UserAccount/Login';
-  private apiUrl = 'http://mbp.bitprosofttech.com/api/UserAccount/UserRegistration';
-
   loginUser(credentials: { email: string; password: string }): Observable<any> {
-    var loginRequest = this.http.post<any>(ApiEndpoints.userAccount.login, credentials);
-    console.log('Login request:', loginRequest);
-    return loginRequest;
+    return this.http.post<any>(ApiEndpoints.userAccount.login, credentials).pipe(
+      tap(response => {
+        // Store the authentication data in local storage if login is successful
+        if (response && response.isLoginSuccess) {
+          localStorage.setItem('userTokenData', JSON.stringify(response));
+        }
+      })
+    );
   }
+
   constructor(private http: HttpClient) { }
 
   registerUser(user: UserRegistrationModel): Observable<RegistrationResponseModel> {
