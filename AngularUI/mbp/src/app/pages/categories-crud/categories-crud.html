@@ -5,6 +5,7 @@
   <form [formGroup]="form" (ngSubmit)="submit()" class="mb-4">
     <div class="row g-2">
       <div class="col-md-4">
+        <input formControlName="uniqueId"  type="hidden" />
         <input formControlName="name" class="form-control" placeholder="Category Name" required />
       </div>
       <div class="col-md-4">
@@ -26,7 +27,7 @@
   <table class="table table-bordered table-hover">
     <thead class="table-light">
       <tr>
-        <th>ID</th>
+        <th>S.No.</th>
         <th>Name</th>
         <th>Description</th>
         <th>Allocated Amount</th>
@@ -35,15 +36,15 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let cat of categories()">
-        <td>{{ cat.id }}</td>
+      <tr *ngFor="let cat of categories(); let i = index">
+        <td>{{ i + 1 }}.</td>
         <td>{{ cat.name }}</td>
         <td>{{ cat.description }}</td>
         <td>{{ cat.allocatedAmount }}</td>
         <td>{{ cat.parentId }}</td>
         <td>
           <button class="btn btn-sm btn-info me-2" (click)="selectCategory(cat)">Edit</button>
-          <button class="btn btn-sm btn-danger" (click)="deleteCategory(cat.id!)">Delete</button>
+          <button class="btn btn-sm btn-danger" (click)="deleteCategory(cat.uniqueId!)">Delete</button>
         </td>
       </tr>
     </tbody>

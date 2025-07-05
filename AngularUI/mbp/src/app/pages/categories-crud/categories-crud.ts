@@ -20,7 +20,7 @@ export class CategoriesCrudComponent {
 
   constructor(private categoryService: CategoryService, private fb: FormBuilder) {
     this.form = this.fb.group({
-      id: [],
+      uniqueId: [0],
       name: ['', Validators.required],
       description: [''],
       allocatedAmount: [0, [Validators.required, Validators.min(0)]],
@@ -49,6 +49,8 @@ export class CategoriesCrudComponent {
   clearForm() {
     this.form.reset({ allocatedAmount: 0 });
     this.selectedCategory.set(null);
+        this.form.patchValue({uniqueId:0});
+
     this.isEditMode.set(false);
   }
 
