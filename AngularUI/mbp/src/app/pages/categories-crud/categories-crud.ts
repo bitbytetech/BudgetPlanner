@@ -23,8 +23,9 @@ export class CategoriesCrudComponent {
       uniqueId: [0],
       name: ['', Validators.required],
       description: [''],
-      allocatedAmount: [0, [Validators.required, Validators.min(0)]],
-      parentId: []
+      allocatedAmount: ['', [Validators.required, Validators.min(0)]],
+      parentId: [''],
+      isSubCategory: [false]
     });
     this.loadCategories();
   }
@@ -49,24 +50,13 @@ export class CategoriesCrudComponent {
   clearForm() {
     this.form.reset({ allocatedAmount: 0 });
     this.selectedCategory.set(null);
-        this.form.patchValue({uniqueId:0});
-
+    this.form.patchValue({uniqueId:0});
     this.isEditMode.set(false);
   }
 
   submit() {
     if (this.form.invalid) return;
-    const category = this.form.value as CategoryModel;
-    // if (this.isEditMode()) {
-    //   this.categoryService.updateCategory(category.id!, category).subscribe({
-    //     next: () => {
-    //       this.notification.set('Category updated!');
-    //       this.loadCategories();
-    //       this.clearForm();
-    //     },
-    //     error: () => this.notification.set('Update failed')
-    //   });
-    // } else {
+    const category = this.form.value as CategoryModel; 
       this.categoryService.createCategory(category).subscribe({
         next: () => {
           this.notification.set('Category created!');
@@ -88,5 +78,9 @@ export class CategoriesCrudComponent {
       },
       error: () => this.notification.set('Delete failed')
     });
+  }
+
+   get getParentCategories(): CategoryModel[] {
+    return this.categories().filter(cat => !cat.parentId || cat.parentId === 0);
   }
 }

@@ -3,19 +3,35 @@
   <div *ngIf="notification()" class="alert alert-info">{{ notification() }}</div>
 
   <form [formGroup]="form" (ngSubmit)="submit()" class="mb-4">
+    <div class="row">
+      <div class="col-12 d-flex justify-content-end align-items-center">
+          <!-- Checkbox -->
+       <input class="form-check-input me-2" type="checkbox" id="isSubCategory" formControlName="isSubCategory">
+      <label class="form-check-label mb-0" for="isSubCategory">Add Sub Category</label>
+    </div> 
+    </div>
     <div class="row g-2">
-      <div class="col-md-4">
+      <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
         <input formControlName="uniqueId"  type="hidden" />
         <input formControlName="name" class="form-control" placeholder="Category Name" required />
       </div>
-      <div class="col-md-4">
+      <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
         <input formControlName="description" class="form-control" placeholder="Description" />
       </div>
-      <div class="col-md-2">
+      <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
         <input type="number" formControlName="allocatedAmount" class="form-control" placeholder="Allocated Amount" required />
       </div>
-      <div class="col-md-2">
+      <!-- <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
         <input type="number" formControlName="parentId" class="form-control" placeholder="Parent ID" />
+      </div> -->
+
+      
+
+     <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3"   *ngIf="form.get('isSubCategory')?.value">
+         <select formControlName="parentId" class="form-control">
+          <option value="0" [selected]="true">-- Select Parent Category --</option>
+          <option *ngFor="let category of getParentCategories" [value]="category.uniqueId">{{ category.name }} </option>
+        </select>
       </div>
     </div>
     <div class="mt-3">

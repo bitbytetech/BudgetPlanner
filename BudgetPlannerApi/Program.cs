@@ -67,7 +67,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IUserAccountService, UserAccountService>();
 
 // Controllers and Swagger config
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+ .AddJsonOptions(options =>
+  {
+      options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+  });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();

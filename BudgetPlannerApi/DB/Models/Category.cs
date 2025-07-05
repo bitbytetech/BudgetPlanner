@@ -3,6 +3,7 @@ using BudgetPlannerApi.DB.Models.User;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace BudgetPlannerApplication_2025.Models
 {
@@ -31,6 +32,7 @@ namespace BudgetPlannerApplication_2025.Models
         [ForeignKey("UserId")]
         public AppUser? AppUser { get; set; }
 
+        [JsonIgnore]
         // Self-referencing navigation property
         [ForeignKey("ParentId")]
         public Category? ParentCategory { get; set; }
