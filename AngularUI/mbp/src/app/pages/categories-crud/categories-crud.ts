@@ -24,7 +24,7 @@ export class CategoriesCrudComponent {
       name: ['', Validators.required],
       description: [''],
       allocatedAmount: ['', [Validators.required, Validators.min(0)]],
-      parentId: [''],
+      parentId: [0],
       isSubCategory: [false]
     });
     this.loadCategories();
@@ -41,22 +41,27 @@ export class CategoriesCrudComponent {
     });
   }
 
-  selectCategory(category: CategoryModel) {
-    this.selectedCategory.set(category);
+  editCategory(category: CategoryModel) {
     this.form.patchValue(category);
-    this.isEditMode.set(true);
+    this.isEditMode.set(true); 
+    this.form.patchValue({ isSubCategory: !!category.parentId && category.parentId !== 0 });
+    this.form.patchValue(category);  
   }
 
   clearForm() {
     this.form.reset({ allocatedAmount: 0 });
     this.selectedCategory.set(null);
-    this.form.patchValue({uniqueId:0});
+    this.form.patchValue({uniqueId:0,parentId:0});
     this.isEditMode.set(false);
   }
 
   submit() {
     if (this.form.invalid) return;
-    const category = this.form.value as CategoryModel; 
+    const category = this.form.value as CategoryModel;
+    if (!category.parentId)
+      {
+        category.parentId = 0;
+      }
       this.categoryService.createCategory(category).subscribe({
         next: () => {
           this.notification.set('Category created!');

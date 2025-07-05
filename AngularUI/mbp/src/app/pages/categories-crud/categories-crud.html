@@ -21,12 +21,7 @@
       <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
         <input type="number" formControlName="allocatedAmount" class="form-control" placeholder="Allocated Amount" required />
       </div>
-      <!-- <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
-        <input type="number" formControlName="parentId" class="form-control" placeholder="Parent ID" />
-      </div> -->
-
       
-
      <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3"   *ngIf="form.get('isSubCategory')?.value">
          <select formControlName="parentId" class="form-control">
           <option value="0" [selected]="true">-- Select Parent Category --</option>
@@ -59,7 +54,7 @@
         <td>{{ cat.allocatedAmount }}</td>
         <td>{{ cat.parentId }}</td>
         <td>
-          <button class="btn btn-sm btn-info me-2" (click)="selectCategory(cat)">Edit</button>
+          <button class="btn btn-sm btn-info me-2" (click)="editCategory(cat)">Edit</button>
           <button class="btn btn-sm btn-danger" (click)="deleteCategory(cat.uniqueId!)">Delete</button>
         </td>
       </tr>

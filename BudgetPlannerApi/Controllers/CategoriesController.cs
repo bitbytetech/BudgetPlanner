@@ -74,7 +74,7 @@ namespace BudgetPlannerApplication_2025.Controllers
             if (existingCategory == null)
             {
                 category.CreatedDate = DateTime.UtcNow;
-                _context.Categories.Add(category);
+                 _context.Categories.Add(category);
                 await _context.SaveChangesAsync();
 
                 return CreatedAtAction(nameof(GetCategory), new { id = category.UniqueId }, category);
