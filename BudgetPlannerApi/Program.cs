@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Text;
+using System.Text.Json.Serialization;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -70,7 +71,10 @@ builder.Services.AddScoped<IUserAccountService, UserAccountService>();
 builder.Services.AddControllers()
  .AddJsonOptions(options =>
   {
-      options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+      options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+      options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles; // instead of Preserve
+      options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+
   });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
