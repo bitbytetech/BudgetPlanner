@@ -15,19 +15,28 @@ namespace BudgetPlannerApplication_2025.Controllers
         {
             _context = context;
         }
-
+        private int? GetLoggedInUserId()
+        {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+            if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
+                return userId;
+            return null;
+        }
         // GET: api/BudgetPlans
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BudgetPlan>>> GetBudgetPlans()
         {
-            return await _context.BudgetPlans.ToListAsync();
+            var userId = GetLoggedInUserId();
+            return await _context.BudgetPlans.Where(c => c.UserId.Equals(userId)).ToListAsync();
         }
 
         // GET: api/BudgetPlans/5
         [HttpGet("{id}")]
         public async Task<ActionResult<BudgetPlan>> GetBudgetPlan(int id)
         {
-            var budgetPlan = await _context.BudgetPlans.FindAsync(id);
+            var userId = GetLoggedInUserId();
+
+            var budgetPlan = await _context.BudgetPlans.Where(c => c.UserId == userId).FirstOrDefaultAsync();
 
             if (budgetPlan == null)
             {
@@ -43,6 +52,10 @@ namespace BudgetPlannerApplication_2025.Controllers
             if (budgetPlan == null)
                 return BadRequest("Invalid data.");
 
+            var userId = GetLoggedInUserId();
+            if (userId == null)
+                return Unauthorized("User ID not found in token.");
+            budgetPlan.UserId = userId;
             var existingPlan = await _context.BudgetPlans
                 .AsNoTracking()
                 .FirstOrDefaultAsync(b => b.UniqueId == budgetPlan.UniqueId);
@@ -55,9 +68,9 @@ namespace BudgetPlannerApplication_2025.Controllers
 
                 return CreatedAtAction(nameof(GetBudgetPlan), new { id = budgetPlan.UniqueId }, budgetPlan);
             }
-            else
+            else if (userId == existingPlan.UserId)
             {
-                // Update existing
+                budgetPlan.LastUpdatedDate = DateTime.UtcNow;
                 _context.Entry(budgetPlan).State = EntityState.Modified;
 
                 try
@@ -78,14 +91,41 @@ namespace BudgetPlannerApplication_2025.Controllers
 
                 return Ok(budgetPlan);
             }
+            else
+            {
+                return Forbid("You do not have permission to edit this budget plan.");
+            }
         }
 
 
 
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteBudgetPlan(int id)
+        //{
+        //    var budgetPlan = await _context.BudgetPlans.FindAsync(id);
+        //    if (budgetPlan == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    _context.BudgetPlans.Remove(budgetPlan);
+        //    await _context.SaveChangesAsync();
+
+        //    return NoContent();
+        //}
+
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBudgetPlan(int id)
+        public async Task<IActionResult> DeleteWishList(int id)
         {
-            var budgetPlan = await _context.BudgetPlans.FindAsync(id);
+            var userId = GetLoggedInUserId();
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            var budgetPlan = await _context.BudgetPlans
+                .FirstOrDefaultAsync(w => w.UniqueId == id && w.UserId == userId);
+
             if (budgetPlan == null)
             {
                 return NotFound();

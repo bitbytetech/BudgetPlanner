@@ -10,7 +10,7 @@ namespace BudgetPlannerApplication_2025.Models
         [Key]
         public int UniqueId { get; set; }
         // Foreign key property
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
 
         // Navigation property
         [ForeignKey("UserId")]
@@ -19,5 +19,7 @@ namespace BudgetPlannerApplication_2025.Models
 
         [ForeignKey("CategoryId")]
         public Category? Category { get; set; }
+        public DateTime? LastUpdatedDate { get; set; }
+
     }
 }

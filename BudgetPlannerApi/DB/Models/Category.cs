@@ -18,6 +18,8 @@ namespace BudgetPlannerApplication_2025.Models
 
         public string ?Description { get; set; } = string.Empty;
 
+        public int AllocatedAmount { get; set; }
+
         public DateTime ?CreatedDate { get; set; }
 
         public DateTime ?LastUpdatedDate { get; set; }

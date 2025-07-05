@@ -1,4 +1,4 @@
-using Bpst.API.DB;
+﻿using Bpst.API.DB;
 using Bpst.API.Services.UserAccount;
 using Bpst.API.Swagger;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -14,35 +14,35 @@ var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
-builder.Services.AddCors(Options =>
+// ✅ Correct CORS policy
+builder.Services.AddCors(options =>
 {
-    Options.AddPolicy(name: MyAllowSpecificOrigins,
+    options.AddPolicy(name: MyAllowSpecificOrigins,
         policy =>
         {
-            policy.WithOrigins("*")
+            policy.AllowAnyOrigin()   // Allow any origin — or replace with specific URLs if needed
                 .AllowAnyOrigin()
-                .AllowAnyHeader()
-                .AllowAnyMethod();
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
         });
 });
 
 builder.Services.Configure<DataProtectionTokenProviderOptions>(opts => opts.TokenLifespan = TimeSpan.FromHours(10));
 
-// Add services to the container.
-
+// ✅ JWT Authentication setup
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(x =>
+})
+.AddJwtBearer(x =>
 {
     x.TokenValidationParameters = new TokenValidationParameters
     {
         ValidIssuer = config["JwtSettings:Issuer"],
         ValidAudience = config["JwtSettings:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey
-            (Encoding.UTF8.GetBytes(config["JwtSettings:Key"]!)),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JwtSettings:Key"]!)),
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateIssuerSigningKey = true
@@ -59,37 +59,37 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-
-//Adding Authentication
-builder.Services.AddAuthentication();
-
-
-builder.Services.AddControllers();
-builder.Services.AddScoped<IUserAccountService, UserAccountService>();
-builder.Services.AddControllers();
+// Database connection
 builder.Services.AddDbContext<AppDbContext>(options =>
-             options.UseSqlServer(builder.Configuration.GetConnectionString("LiveDB")));
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+    options.UseSqlServer(builder.Configuration.GetConnectionString("LiveDB")));
+
+// Services registration
+builder.Services.AddScoped<IUserAccountService, UserAccountService>();
+
+// Controllers and Swagger config
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Swagger setup
 if (app.Environment.IsDevelopment())
 {
-    
+    // (optional) enable developer specific configurations
 }
 app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
+// ✅ Middleware order — very important!
+app.UseCors(MyAllowSpecificOrigins);
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.UseCors(MyAllowSpecificOrigins);
-
 
 app.Run();

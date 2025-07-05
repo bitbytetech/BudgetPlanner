@@ -16,19 +16,29 @@ namespace BudgetPlannerApplication_2025.Controllers
         {
             _context = context;
         }
+        private int? GetLoggedInUserId()
+        {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+            if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
+                return userId;
+            return null;
+        }
 
         // GET: api/WishLists
         [HttpGet]
         public async Task<ActionResult<IEnumerable<WishList>>> GetWishLists()
         {
-            return await _context.WishLists.ToListAsync();
+            var userId = GetLoggedInUserId();
+            return await _context.WishLists.Where(c => c.UserId.Equals(userId)).ToListAsync();
         }
 
         // GET: api/WishLists/5
         [HttpGet("{id}")]
         public async Task<ActionResult<WishList>> GetWishList(int id)
         {
-            var wishList = await _context.WishLists.FindAsync(id);
+            var userId = GetLoggedInUserId();
+
+            var wishList = await _context.WishLists.Where(c => c.UserId == userId).FirstOrDefaultAsync();
 
             if (wishList == null)
             {
@@ -44,7 +54,10 @@ namespace BudgetPlannerApplication_2025.Controllers
         {
             if (wishList == null)
                 return BadRequest("Invalid wish list data.");
-
+            var userId = GetLoggedInUserId();
+            if (userId == null)
+                return Unauthorized("User ID not found in token.");
+            wishList.UserId = userId;
             var existingWishList = await _context.WishLists
                 .AsNoTracking()
                 .FirstOrDefaultAsync(w => w.UniqueId == wishList.UniqueId);
@@ -57,9 +70,9 @@ namespace BudgetPlannerApplication_2025.Controllers
 
                 return CreatedAtAction(nameof(GetWishList), new { id = wishList.UniqueId }, wishList);
             }
-            else
+            else if (userId == existingWishList.UserId)
             {
-                // Update existing wish list item
+                wishList.LastUpdatedDate = DateTime.UtcNow;
                 _context.Entry(wishList).State = EntityState.Modified;
 
                 try
@@ -80,14 +93,41 @@ namespace BudgetPlannerApplication_2025.Controllers
 
                 return Ok(wishList);
             }
+            else
+            {
+                return Forbid("You do not have permission to edit this Wish list.");
+            }
         }
 
 
-        // DELETE: api/WishLists/5
+        //// DELETE: api/WishLists/5
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteWishList(int id)
+        //{
+        //    var wishList = await _context.WishLists.FindAsync(id);
+        //    if (wishList == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    _context.WishLists.Remove(wishList);
+        //    await _context.SaveChangesAsync();
+
+        //    return NoContent();
+        //}
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteWishList(int id)
         {
-            var wishList = await _context.WishLists.FindAsync(id);
+            var userId = GetLoggedInUserId();
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            var wishList = await _context.WishLists
+                .FirstOrDefaultAsync(w => w.UniqueId == id && w.UserId == userId);
+
             if (wishList == null)
             {
                 return NotFound();
