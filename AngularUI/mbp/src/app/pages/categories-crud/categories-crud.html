@@ -14,12 +14,18 @@
       <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
         <input formControlName="uniqueId"  type="hidden" />
         <input formControlName="name" class="form-control" placeholder="Category Name" required />
-      </div>
+       <div *ngIf="form.get('name')?.invalid && form.get('name')?.touched" class="text-danger">   
+    Category Name is required.
+</div> 
+</div>
       <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
         <input formControlName="description" class="form-control" placeholder="Description" />
       </div>
       <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
         <input type="number" formControlName="allocatedAmount" class="form-control" placeholder="Allocated Amount" required />
+        <div *ngIf="form.get('allocatedAmount')?.invalid && form.get('allocatedAmount')?.touched" class="text-danger"> 
+            Allocated Amount is required and must be a positive number b/w 0 to 2,00,00,00,000. 
+        </div> 
       </div>
       
      <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3"   *ngIf="form.get('isSubCategory')?.value">
@@ -46,18 +52,31 @@
         <th>Actions</th>
       </tr>
     </thead>
-    <tbody>
-      <tr *ngFor="let cat of categories(); let i = index">
-        <td>{{ i + 1 }}.</td>
-        <td>{{ cat.name }}</td>
-        <td>{{ cat.description }}</td>
-        <td>{{ cat.allocatedAmount }}</td>
-        <td>{{ cat.parentId }}</td>
-        <td>
-          <button class="btn btn-sm btn-info me-2" (click)="editCategory(cat)">Edit</button>
-          <button class="btn btn-sm btn-danger" (click)="deleteCategory(cat.uniqueId!)">Delete</button>
-        </td>
-      </tr>
-    </tbody>
+  <tbody>
+  <ng-container *ngFor="let cat of categories()">
+    <tr *ngIf="cat.parentId === 0 || cat.parentId == null" class="fw-bold">
+      <td>{{ cat.uniqueId }}</td>
+      <td>{{ cat.name }}</td>
+      <td>{{ cat.description }}</td>
+      <td>{{ cat.allocatedAmount }}</td>
+      <td>{{ getParentCategoryName(cat.parentId) }}</td>
+      <td>
+        <button class="btn btn-sm btn-info me-2" (click)="editCategory(cat)">Edit</button>
+        <button class="btn btn-sm btn-danger" (click)="deleteCategory(cat.uniqueId!)">Delete</button>
+      </td>
+    </tr>
+    <tr *ngFor="let sub of cat.subCategories || []" class="table-secondary">
+      <td>{{ sub.uniqueId }}</td>
+      <td style="padding-left: 2em;">↳ {{ sub.name }}</td>
+      <td>{{ sub.description }}</td>
+      <td>{{ sub.allocatedAmount }}</td>
+      <td>{{ getParentCategoryName(sub.parentId) }}</td>
+      <td>
+        <button class="btn btn-sm btn-info me-2" (click)="editCategory(sub)">Edit</button>
+        <button class="btn btn-sm btn-danger" (click)="deleteCategory(sub.uniqueId!)">Delete</button>
+      </td>
+    </tr>
+  </ng-container>
+</tbody>
   </table>
 </div>

@@ -8,7 +8,7 @@ export interface CategoryModel {
   lastUpdatedDate?: string | null;
   userId?: number;
   appUser?: any; // You can strongly type this if needed
-  subCategories?: SubCategoryWrapper | null;
+  subCategories?: CategoryModel[] | null;
 }
 
 export interface SubCategoryWrapper {

@@ -37,7 +37,11 @@ namespace BudgetPlannerApplication_2025.Controllers
         public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
         {
             var userId = GetLoggedInUserId();
-            var data = await _context.Categories.Where(c => c.UserId.Equals(userId)).ToListAsync();
+            var data = await _context.Categories
+              //  .Include(sc=>sc.ParentId)
+                .Where(c => c.UserId.Equals(userId))
+                .OrderBy(c=>c.ParentId)
+                .ToListAsync();
             return Ok(data);
         }
 
@@ -61,8 +65,10 @@ namespace BudgetPlannerApplication_2025.Controllers
         {
             if (category == null)
                 return BadRequest("Invalid category data.");
+            else if (category.ParentId == 0)
+                category.ParentId = null;
 
-            var userId = GetLoggedInUserId();
+                var userId = GetLoggedInUserId();
             if (userId == null)
                 return Unauthorized("User ID not found in token.");
             category.UserId = userId;

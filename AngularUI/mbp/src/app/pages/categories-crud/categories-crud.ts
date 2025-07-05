@@ -1,3 +1,4 @@
+
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -23,7 +24,7 @@ export class CategoriesCrudComponent {
       uniqueId: [0],
       name: ['', Validators.required],
       description: [''],
-      allocatedAmount: ['', [Validators.required, Validators.min(0)]],
+      allocatedAmount: ['', [Validators.required, Validators.min(0), Validators.max(2000000000)]],
       parentId: [0],
       isSubCategory: [false]
     });
@@ -33,7 +34,9 @@ export class CategoriesCrudComponent {
   loadCategories() {
     this.categoryService.getCategories().subscribe({
       next: (data) => {
+        
         console.log(data);
+        data.sort();
         this.categories.set(data);
       },
       error: (_error) => { console.log(_error);
@@ -85,7 +88,13 @@ export class CategoriesCrudComponent {
     });
   }
 
-   get getParentCategories(): CategoryModel[] {
+  get getParentCategories(): CategoryModel[] {
     return this.categories().filter(cat => !cat.parentId || cat.parentId === 0);
+  }
+
+  getParentCategoryName(parentId: number | undefined): string {
+    if (!parentId || !this.getParentCategories.length) return '-';
+    const parent = this.getParentCategories.find((c: CategoryModel) => c.uniqueId === parentId);
+    return parent?.name || '-';
   }
 }

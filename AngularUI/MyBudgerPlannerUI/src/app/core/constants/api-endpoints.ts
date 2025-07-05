@@ -1,6 +1,6 @@
 // src/app/core/constants/api-endpoints.ts
 
-export const ApiBaseUrl = 'http://localhost:5109/api';
+export const ApiBaseUrl = 'https://localhost:7255/';//'http://localhost:5109/api';
 export const ApiEndpoints = {
     userAccount: {
         login: `${ApiBaseUrl}/UserAccount/Login`,

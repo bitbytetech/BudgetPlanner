@@ -105,7 +105,7 @@ namespace Bpst.API.Services.UserAccount
 
             var token = new JwtSecurityToken(
               claims: userClaims,
-              expires: DateTime.Now.AddHours(2),
+              expires: DateTime.Now.AddDays(2),
               signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JwtSettings:Key"])), SecurityAlgorithms.HmacSha256Signature),
               issuer: _config["JwtSettings:Issuer"],
               audience: _config["JwtSettings:Audience"]
