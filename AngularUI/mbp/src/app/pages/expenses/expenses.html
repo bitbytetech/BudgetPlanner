@@ -1,0 +1,53 @@
+<div class="container my-4">
+  <h2>Expenses Management</h2>
+  <div *ngIf="notification()" class="alert alert-info">{{ notification() }}</div>
+  <form [formGroup]="form" (ngSubmit)="submit()" class="mb-4">
+    <div class="mb-3">
+      <label for="categoryId" class="form-label">Category</label>
+      <select id="categoryId" class="form-control" formControlName="categoryId" required>
+        <option value="" disabled>Select Category</option>
+        <option *ngFor="let cat of flatCategories" [value]="cat.id">{{ cat.label }}</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="title" class="form-label">Title</label>
+      <input id="title" type="text" class="form-control" formControlName="title" required />
+    </div>
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <input id="description" type="text" class="form-control" formControlName="description" />
+    </div>
+    <div class="mb-3">
+      <label for="amount" class="form-label">Amount</label>
+      <input id="amount" type="number" class="form-control" formControlName="amount" required min="1" />
+    </div>
+    <button type="submit" class="btn btn-primary me-2" [disabled]="form.invalid || isLoading()">{{ isEditMode() ? 'Update' : 'Save' }} Expense</button>
+    <button type="button" class="btn btn-secondary" (click)="clearForm()">Clear</button>
+  </form>
+
+  <table class="table table-bordered table-hover">
+    <thead class="table-light">
+      <tr>
+        <th>#</th>
+        <th>Category</th>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Amount</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let exp of expenses(); let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ getCategoryLabel(exp.categoryId) }}</td>
+        <td>{{ exp.title }}</td>
+        <td>{{ exp.description }}</td>
+        <td>{{ exp.amount | currency:'INR':'symbol':'1.0-0' }}</td>
+        <td>
+          <button class="btn btn-sm btn-info me-2" (click)="editExpense(exp)">Edit</button>
+          <button class="btn btn-sm btn-danger" (click)="deleteExpense(exp.uniqueId!)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
