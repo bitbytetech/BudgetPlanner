@@ -39,7 +39,7 @@ export class Login {
           if (response && response.isLoginSuccess) {
             this.notification.set('Login successful!');
             this.isSuccess.set(true);
-            setTimeout(() => this.router.navigate(['/']), 1000);
+            setTimeout(() => this.router.navigate(['/categories-crud']), 1000);
           } else {
             this.notification.set(response?.message || 'Login failed. Please check your credentials.');
             this.isSuccess.set(false);
