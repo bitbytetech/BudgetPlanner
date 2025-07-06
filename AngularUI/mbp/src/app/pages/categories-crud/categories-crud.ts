@@ -97,4 +97,8 @@ export class CategoriesCrudComponent {
     const parent = this.getParentCategories.find((c: CategoryModel) => c.uniqueId === parentId);
     return parent?.name || '-';
   }
+
+    getTotalAllocatedAmount(subCategories: CategoryModel[]): number {
+    return (subCategories || []).reduce((sum, sub) => sum + (sub.allocatedAmount || 0), 0);
+  }
 }
