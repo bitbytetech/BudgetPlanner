@@ -1,6 +1,7 @@
-import { Component, computed, signal } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { Component, computed, signal, OnInit, effect } from '@angular/core';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { LoginResponseModel } from './models/LoginResponseModel';
 
 @Component({
   selector: 'app-root',
@@ -8,21 +9,25 @@ import { CommonModule } from '@angular/common';
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
-export class App {
-  protected title = 'mbp';
-
-  userTokenData = signal<any | null>(null);
-  isLoggedIn = computed(() => !!this.userTokenData()?.isLoginSuccess);
-  userName = computed(() => {
-    const data = this.userTokenData();
-    if (data && data.user) {
-      return data.user.firstName || data.user.email || 'User';
+export class App implements OnInit {
+  protected title = signal('mbp'); 
+  userTokenData = signal<LoginResponseModel | null>(null);
+   constructor(private router: Router) {
+     effect(() => {
+      const data = localStorage.getItem('userTokenData');
+      this.userTokenData.set(data ? JSON.parse(data) : null);
+    });
     }
-    return '';
-  });
 
-  constructor() {
+  isLoggedIn = computed(() => {
+    const user = this.userTokenData();
+    return user ? user.isLoginSuccess : false;
+  });
+  ngOnInit(): void {
     this.loadUser();
+    console.log('App isLoggedIn status ', this.isLoggedIn());
+    const user = this.userTokenData();
+  //    this.userName.set(user ? user.fullName : '');
   }
 
   loadUser() {
@@ -36,5 +41,11 @@ export class App {
     } else {
       this.userTokenData.set(null);
     }
+  }
+
+  logout() {
+    localStorage.removeItem('userTokenData');
+    this.userTokenData.set(null);
+    this.router.navigate(['/login']);
   }
 }

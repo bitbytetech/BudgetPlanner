@@ -2,7 +2,7 @@
   <h2>Categories Management</h2>
   <div *ngIf="notification()" class="alert alert-info">{{ notification() }}</div>
 
-  <form [formGroup]="form" (ngSubmit)="submit()" class="mb-4">
+  <form *ngIf="form" [formGroup]="form!" (ngSubmit)="submit()" class="mb-4">
     <div class="row">
       <div class="col-12 d-flex justify-content-end align-items-center">
           <!-- Checkbox -->
