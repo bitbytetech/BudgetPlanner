@@ -1,11 +1,11 @@
 import { Component, computed, signal, OnInit, effect } from '@angular/core';
-import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterOutlet ,RouterLinkActive} from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { LoginResponseModel } from './models/LoginResponseModel';
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, RouterOutlet, RouterLink],
+  imports: [CommonModule, RouterOutlet, RouterLink,RouterLinkActive],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

@@ -25,20 +25,24 @@ export class ExpensesComponent {
   selectedExpenseId: number | null = null;
 
   constructor(
-    private fb: FormBuilder,
-    private expenseService: ExpenseService,
-    private categoryService: CategoryService
-  ) {
-    this.form = this.fb.group({
-      uniqueId: [null],
-      categoryId: [null, Validators.required],
-      title: ['', Validators.required],
-      description: [''],
-      amount: [0, [Validators.required, Validators.min(1)]]
-    });
-    this.loadCategories();
-    this.loadExpenses();
-  }
+  private fb: FormBuilder,
+  private expenseService: ExpenseService,
+  private categoryService: CategoryService
+) {
+  const today = new Date().toISOString().split('T')[0];
+
+  this.form = this.fb.group({
+    uniqueId: [null],
+    categoryId: [null, Validators.required],
+    title: ['', Validators.required],
+    description: [''],
+    amount: [0, [Validators.required, Validators.min(1)]],
+    expenseDate: [today, Validators.required]  // ✅ today's date prefilled
+  });
+
+  this.loadCategories();
+  this.loadExpenses();
+}
 
   loadCategories() {
     this.categoryService.getCategories().subscribe({
@@ -116,12 +120,11 @@ export class ExpensesComponent {
       error: () => this.notification.set('Delete failed')
     });
   }
-
-  clearForm() {
+clearForm() {
     this.form.reset({ amount: 0 });
-    this.isEditMode.set(false);
-    this.selectedExpenseId = null;
-  }
+    const today = new Date().toISOString().split('T')[0];
+    this.form.reset({ amount: 0, expenseDate: today });
+}
 
   getCategoryLabel(categoryId: number): string {
     const found = this.flatCategories.find(c => c.id === categoryId);

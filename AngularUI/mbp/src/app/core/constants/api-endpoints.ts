@@ -1,6 +1,6 @@
 // src/app/core/constants/api-endpoints.ts
 
-export const ApiBaseUrl = 'http://localhost:5109/api';
+export const ApiBaseUrl = 'https://localhost:7255/api';
 export const ApiSwagger = 'http://mbp.bitprosofttech.com/swagger/index.html';
 //export const ApiBaseUrl = 'http://mbp.bitprosofttech.com/api';
 export const ApiEndpoints = {
