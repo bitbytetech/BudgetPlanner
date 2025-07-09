@@ -11,7 +11,7 @@ namespace BudgetPlannerApplication_2025.Models
         public int UniqueId { get; set; }
         [Required]
         public string Item { get; set; }
-        public string URl { get; set; }
+        public string Url { get; set; }  // ✅ fixed casing
         public string Purpose { get; set; }
         // Foreign key property
         public int? UserId { get; set; }

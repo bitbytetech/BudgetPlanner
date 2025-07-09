@@ -15,7 +15,7 @@ import { CategoryModel } from '../../models/CategoryModel';
   styleUrl: './expenses.scss'
 })
 export class ExpensesComponent {
-  form: FormGroup;
+  expensesForm: FormGroup;
   notification = signal<string | null>(null);
   categories = signal<CategoryModel[]>([]);
   flatCategories: { id: number, label: string }[] = [];
@@ -25,24 +25,24 @@ export class ExpensesComponent {
   selectedExpenseId: number | null = null;
 
   constructor(
-  private fb: FormBuilder,
-  private expenseService: ExpenseService,
-  private categoryService: CategoryService
-) {
-  const today = new Date().toISOString().split('T')[0];
+    private fb: FormBuilder,
+    private expenseService: ExpenseService,
+    private categoryService: CategoryService
+  ) {
+    const today = new Date().toISOString().split('T')[0];
 
-  this.form = this.fb.group({
-    uniqueId: [null],
-    categoryId: [null, Validators.required],
-    title: ['', Validators.required],
-    description: [''],
-    amount: [0, [Validators.required, Validators.min(1)]],
-    expenseDate: [today, Validators.required]  // ✅ today's date prefilled
-  });
+    this.expensesForm = this.fb.group({
+      uniqueId: [0],
+      categoryId: [null, Validators.required],
+      title: ['', Validators.required],
+      description: [''],
+      amount: [0, [Validators.required, Validators.min(1)]],
+      expenseDate: [today, Validators.required]
+    });
 
-  this.loadCategories();
-  this.loadExpenses();
-}
+    this.loadCategories();
+    this.loadExpenses();
+  }
 
   loadCategories() {
     this.categoryService.getCategories().subscribe({
@@ -82,13 +82,13 @@ export class ExpensesComponent {
   }
 
   submit() {
-    if (this.form.invalid) return;
+    if (this.expensesForm.invalid) return;
     this.isLoading.set(true);
-    const expense: ExpenseModel = this.form.value;
+    const expense: ExpenseModel = this.expensesForm.value;
     this.expenseService.createOrEditExpense(expense).subscribe({
-      next: (res) => {
+      next: () => {
         this.notification.set(this.isEditMode() ? 'Expense updated successfully!' : 'Expense saved successfully!');
-        this.form.reset({ amount: 0 });
+        this.expensesForm.reset({ amount: 0 });
         this.isLoading.set(false);
         this.isEditMode.set(false);
         this.selectedExpenseId = null;
@@ -102,7 +102,7 @@ export class ExpensesComponent {
   }
 
   editExpense(expense: ExpenseModel) {
-    this.form.patchValue(expense);
+    this.expensesForm.patchValue(expense);
     this.isEditMode.set(true);
     this.selectedExpenseId = expense.uniqueId!;
   }
@@ -120,14 +120,15 @@ export class ExpensesComponent {
       error: () => this.notification.set('Delete failed')
     });
   }
-clearForm() {
-    this.form.reset({ amount: 0 });
-    const today = new Date().toISOString().split('T')[0];
-    this.form.reset({ amount: 0, expenseDate: today });
+
+  clearForm() {
+  const today = new Date().toISOString().split('T')[0];
+  this.expensesForm.reset({ amount: 0, expenseDate: today });
 }
 
-  getCategoryLabel(categoryId: number): string {
-    const found = this.flatCategories.find(c => c.id === categoryId);
-    return found ? found.label : '';
-  }
+getCategoryLabel(categoryId: number): string {
+  const found = this.flatCategories.find(c => c.id === categoryId);
+  return found ? found.label : '';
+}
+
 }

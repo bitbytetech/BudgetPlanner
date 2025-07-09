@@ -6,6 +6,9 @@ import { Register } from './pages/register/register';
 import { CategoriesCrudComponent } from './pages/categories-crud/categories-crud';
 import { Logout } from './pages/logout/logout';
 import { ExpensesComponent } from './pages/expenses/expenses';
+import { WishlistFormComponent } from './pages/wishlist/wishlist';
+  
+
 
     export const routes: Routes = [
     {path: '', component: Home},
@@ -14,5 +17,9 @@ import { ExpensesComponent } from './pages/expenses/expenses';
     {path: 'register', component: Register},
     {path: 'categories', component: CategoriesCrudComponent},
     {path: 'expenses', component: ExpensesComponent},
-    {path: 'logout', component: Logout}
+    {path: 'logout', component: Logout},
+        { path: 'categories-crud', component: CategoriesCrudComponent },
+        { path: 'wishlist', component: WishlistFormComponent },
+
+
     ];

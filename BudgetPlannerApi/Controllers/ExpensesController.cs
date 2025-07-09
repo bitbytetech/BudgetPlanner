@@ -53,8 +53,13 @@ namespace BudgetPlannerApplication_2025.Controllers
 
 
         [HttpPost("CreateOrEdit")]
-        public async Task<IActionResult> CreateOrEditExpense(Expense expense)
+        public async Task<IActionResult> CreateOrEditExpense([FromBody] Expense expense)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             if (expense == null)
                 return BadRequest("Invalid expense data.");
 

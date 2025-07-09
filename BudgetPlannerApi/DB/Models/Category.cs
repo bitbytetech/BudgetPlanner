@@ -37,6 +37,7 @@ namespace BudgetPlannerApplication_2025.Models
         [ForeignKey("ParentId")]
         public Category? ParentCategory { get; set; }
         public ICollection<Category>? SubCategories { get; set; }
+         
     }
 
 }
