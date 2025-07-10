@@ -9,4 +9,6 @@ BudgetPlannerApi/publish/
 /AngularUI/node_modules/
 MyBudgerPlannerUI/.angular/
 MyBudgerPlannerUI/node_modules/
-/.angular/
+.angular/
+AngularUI/MyBudgerPlannerUI/.angular/
+AngularUI/MyBudgerPlannerUI/node_modules/
