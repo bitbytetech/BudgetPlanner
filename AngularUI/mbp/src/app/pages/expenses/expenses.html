@@ -10,7 +10,11 @@
       <label for="categoryId" class="form-label">Category</label>
       <select id="categoryId" class="form-control" formControlName="categoryId" required>
         <option value="" disabled>Select Category</option>
-        <option *ngFor="let cat of flatCategories" [value]="cat.id">{{ cat.label }}</option>
+        <ng-container *ngFor="let cat of flatCategories">
+          <option [value]="cat.id" [ngStyle]="cat.parentId === null ? {'font-weight':'bold'} : {}">
+            <span *ngIf="cat.parentId !== null">&nbsp;&nbsp;- </span>{{ cat.label }}
+    </option>
+  </ng-container>
       </select>
     </div>
 

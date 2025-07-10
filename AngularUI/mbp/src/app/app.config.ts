@@ -3,12 +3,12 @@ import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { routes } from './app.routes';
-import { UserAccoutServiceInterceptor } from './Interceptor/user-account-interceptor';
+import { UserAccountServiceInterceptor } from './Interceptor/user-account-interceptor';
 
 export const appConfig: ApplicationConfig = { 
   providers: [
     provideHttpClient(withInterceptorsFromDi()),
-    { provide: HTTP_INTERCEPTORS, useClass: UserAccoutServiceInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: UserAccountServiceInterceptor, multi: true },
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),provideRouter(routes),
     provideRouter(routes)

@@ -1,4 +1,3 @@
-
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -18,7 +17,7 @@ export class ExpensesComponent {
   expensesForm: FormGroup;
   notification = signal<string | null>(null);
   categories = signal<CategoryModel[]>([]);
-  flatCategories: { id: number, label: string }[] = [];
+  flatCategories: { id: number, label: string, parentId: number | null }[] = [];
   isLoading = signal(false);
   expenses = signal<ExpenseModel[]>([]);
   isEditMode = signal(false);
@@ -47,9 +46,11 @@ export class ExpensesComponent {
   loadCategories() {
     this.categoryService.getCategories().subscribe({
       next: (data) => {
+        console.log('Categories loaded:', data);
         const array = Array.isArray(data) ? data : (data ?? []);
         this.categories.set(array);
         this.flatCategories = this.flattenCategories(array);
+        console.log('Flattened Categories:', this.flatCategories);
       },
       error: (_error) => {
         this.notification.set('Failed to load categories');
@@ -57,13 +58,13 @@ export class ExpensesComponent {
     });
   }
 
-  flattenCategories(categories: CategoryModel[]): { id: number, label: string }[] {
-    const result: { id: number, label: string }[] = [];
+  flattenCategories(categories: CategoryModel[]): { id: number, label: string, parentId: number | null }[] {
+    const result: { id: number, label: string, parentId: number | null }[] = [];
     for (const cat of categories) {
-      result.push({ id: cat.uniqueId!, label: cat.name });
+      result.push({ id: cat.uniqueId!, label: cat.name, parentId: null });
       if (cat.subCategories && cat.subCategories.length > 0) {
         for (const sub of cat.subCategories) {
-          result.push({ id: sub.uniqueId!, label: `${cat.name} - ${sub.name}` });
+          result.push({ id: sub.uniqueId!, label: sub.name, parentId: cat.uniqueId! });
         }
       }
     }
