@@ -22,6 +22,10 @@ export class ExpensesComponent {
   expenses = signal<ExpenseModel[]>([]);
   isEditMode = signal(false);
   selectedExpenseId: number | null = null;
+  filteredCategories = signal<{ id: number, label: string, parentId: number | null }[]>([]);
+  showCategoryDropdown = signal(false);
+  categorySearch = signal('');
+  hasMoreThan12Matches = signal(false);
 
   constructor(
     private fb: FormBuilder,
@@ -46,10 +50,11 @@ export class ExpensesComponent {
   loadCategories() {
     this.categoryService.getCategories().subscribe({
       next: (data) => {
-        console.log('Categories loaded:', data);
         const array = Array.isArray(data) ? data : (data ?? []);
         this.categories.set(array);
         this.flatCategories = this.flattenCategories(array);
+        this.updateFilteredCategories();
+        console.log('Categories loaded:', data);
         console.log('Flattened Categories:', this.flatCategories);
       },
       error: (_error) => {
@@ -130,6 +135,39 @@ export class ExpensesComponent {
 getCategoryLabel(categoryId: number): string {
   const found = this.flatCategories.find(c => c.id === categoryId);
   return found ? found.label : '';
+}
+
+updateFilteredCategories() {
+  const search = this.categorySearch().toLowerCase();
+  if (!search) {
+    this.filteredCategories.set([]);
+    this.hasMoreThan12Matches.set(false);
+    return;
+  }
+  let filtered = this.flatCategories.filter(cat => cat.label.toLowerCase().includes(search));
+  this.hasMoreThan12Matches.set(filtered.length > 12);
+  this.filteredCategories.set(filtered.slice(0, 12));
+}
+
+onCategorySearchChange(value: string) {
+  this.categorySearch.set(value);
+  this.updateFilteredCategories();
+  this.showCategoryDropdown.set(true);
+}
+
+onCategorySelect(cat: { id: number, label: string, parentId: number | null }) {
+  this.expensesForm.patchValue({ categoryId: cat.id });
+  this.categorySearch.set(cat.label);
+  this.showCategoryDropdown.set(false);
+}
+
+onCategoryInputFocus() {
+  this.updateFilteredCategories();
+  this.showCategoryDropdown.set(true);
+}
+
+onCategoryInputBlur() {
+  setTimeout(() => this.showCategoryDropdown.set(false), 200); // Delay to allow click
 }
 
 }

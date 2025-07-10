@@ -8,14 +8,25 @@
          <div class="row g-2">
       <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
       <label for="categoryId" class="form-label">Category</label>
-      <select id="categoryId" class="form-control" formControlName="categoryId" required>
-        <option value="" disabled>Select Category</option>
-        <ng-container *ngFor="let cat of flatCategories">
-          <option [value]="cat.id" [ngStyle]="cat.parentId === null ? {'font-weight':'bold'} : {}">
-            <span *ngIf="cat.parentId !== null">&nbsp;&nbsp;- </span>{{ cat.label }}
-    </option>
-  </ng-container>
-      </select>
+      <div style="position: relative;">
+  <input id="categoryId" #catInput type="text" class="form-control" 
+         [value]="categorySearch()" 
+         (input)="onCategorySearchChange(catInput.value)"
+         (focus)="onCategoryInputFocus()"
+         (blur)="onCategoryInputBlur()"
+         placeholder="Select Category" autocomplete="off" required />
+  <input type="hidden" formControlName="categoryId" />
+  <ul *ngIf="showCategoryDropdown() && categorySearch()" class="dropdown-menu show w-100" style="max-height: 240px; overflow-y: auto; position: absolute; z-index: 1000;">
+    <li *ngFor="let cat of filteredCategories(); let last = last" 
+        (mousedown)="onCategorySelect(cat)"
+        [ngStyle]="cat.parentId === null ? {'font-weight':'bold'} : {}"
+        style="cursor:pointer;">
+      <span *ngIf="cat.parentId !== null">&nbsp;&nbsp;- </span>{{ cat.label }}
+    </li>
+    <li *ngIf="filteredCategories().length === 0" class="dropdown-item text-muted">No results</li>
+    <li *ngIf="hasMoreThan12Matches()" class="dropdown-item text-center">...</li>
+  </ul>
+</div>
     </div>
 
     <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
