@@ -137,6 +137,7 @@ getCategoryLabel(categoryId: number): string {
   return found ? found.label : '';
 }
 
+
 updateFilteredCategories() {
   const search = this.categorySearch().toLowerCase();
   if (!search) {
@@ -144,7 +145,18 @@ updateFilteredCategories() {
     this.hasMoreThan12Matches.set(false);
     return;
   }
-  let filtered = this.flatCategories.filter(cat => cat.label.toLowerCase().includes(search));
+
+  console.log('Flat categories:', this.flatCategories);
+
+  // Remove duplicates based on label
+  const uniqueCategories = Array.from(
+    new Map(this.flatCategories.map(cat => [cat.label.toLowerCase(), cat])).values()
+  );
+
+  let filtered = uniqueCategories.filter(cat =>
+    cat.label.toLowerCase().includes(search)
+  );
+
   this.hasMoreThan12Matches.set(filtered.length > 12);
   this.filteredCategories.set(filtered.slice(0, 12));
 }

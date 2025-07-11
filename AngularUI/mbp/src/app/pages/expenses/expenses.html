@@ -86,10 +86,13 @@
         <td>{{ exp.title }}</td>
         <td>{{ exp.description }}</td>
         <td>{{ exp.amount | currency:'INR':'symbol':'1.0-0' }}</td>
-        <td>
-          <button class="btn btn-sm btn-info me-2" (click)="editExpense(exp)">Edit</button>
-          <button class="btn btn-sm btn-danger" (click)="deleteExpense(exp.uniqueId!)">Delete</button>
-        </td>
+   <td>
+  <div class="d-flex align-items-center gap-2">
+    <button class="btn btn-sm btn-info" (click)="editExpense(exp)">Edit</button>
+    <button class="btn btn-sm btn-danger" (click)="deleteExpense(exp.uniqueId!)">Delete</button>
+  </div>
+</td>
+
       </tr>
     </tbody>
   </table>
