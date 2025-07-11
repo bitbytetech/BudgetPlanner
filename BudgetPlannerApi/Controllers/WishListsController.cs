@@ -47,11 +47,14 @@ namespace BudgetPlannerApplication_2025.Controllers
 
             return wishList;
         }
-
+       
 
         [HttpPost("CreateOrEdit")]
-        public async Task<IActionResult> CreateOrEditWishList(WishList wishList)
+        public async Task<IActionResult> CreateOrEditWishList([FromBody] WishList wishList)
         {
+            if (!ModelState.IsValid)
+                return BadRequest("Payload is required.");
+
             if (wishList == null)
                 return BadRequest("Invalid wish list data.");
             var userId = GetLoggedInUserId();

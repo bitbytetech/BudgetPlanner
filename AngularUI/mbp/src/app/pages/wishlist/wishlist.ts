@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { WishlistService } from '../../services/wishlist.service';
 
 @Component({
   selector: 'app-wishlist-form',
@@ -12,25 +13,45 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 export class WishlistFormComponent {
   form: FormGroup;
   notification = signal<string | null>(null);
-
-  constructor(private fb: FormBuilder) {
+  isLoading = signal(false);
+  isSuccess = signal(false);
+  constructor(private fb: FormBuilder,
+    private wishlistService: WishlistService
+   ) {
     this.form = this.fb.group({
       uniqueId: [0],
       item: ['', Validators.required],
-      url: [''],
-      purpose: [''],
-    });
+      amount: [0, Validators.required],
+      description: [''],});
   }
 
-  submit() {
-    if (this.form.invalid) return;
+submit() {
+  if (this.form.invalid) return;
 
-    const wishlistData = this.form.value;
-    console.log('Submitting:', wishlistData);
+  this.isLoading.set(true);
+  this.notification.set(null);
 
-    // TODO: Call WishlistService to POST this to API
+  const wishlistData = this.form.value;
+  console.log('Submitting:', wishlistData);
 
-    this.notification.set('Wish item saved!');
-    this.form.reset();
-  }
+  this.wishlistService.saveWishListItem(wishlistData).subscribe({
+    next: () => {
+      this.isLoading.set(false);
+      this.notification.set('Wish item saved successfully!');
+      this.isSuccess.set(true);
+
+      setTimeout(() => {
+        this.form.reset();
+        // optionally navigate
+        // this.router.navigate(['/wishlist-list']);
+      }, 1000);
+    },
+    error: () => {
+      this.isLoading.set(false);
+      this.notification.set('Something went wrong. Please try again.');
+      this.isSuccess.set(false);
+    }
+  });
+}
+
 }

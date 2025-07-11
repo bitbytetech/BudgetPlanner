@@ -18,6 +18,11 @@ export const ApiEndpoints = {
         getAll: `${ApiBaseUrl}/Expenses`,
         getById: (id: number) => `${ApiBaseUrl}/Expenses/${id}`,
         delete: (id: number) => `${ApiBaseUrl}/Expenses/${id}`
+    },
+    WishLists: {
+        createOrEdit: `${ApiBaseUrl}/WishLists/CreateOrEdit`,
+        getAll: `${ApiBaseUrl}/WishLists`,
+        getById: (id: number) => `${ApiBaseUrl}/WishLists/${id}`,
+        delete: (id: number) => `${ApiBaseUrl}/WishLists/${id}`
     }
-    // Add more modules here
 };
