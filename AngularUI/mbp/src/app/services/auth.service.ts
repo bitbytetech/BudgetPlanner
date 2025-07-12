@@ -46,18 +46,24 @@ export class AuthService {
 
 
 
-  loginUser(credentials: { loginName: string; password: string }): Observable<any> {
-    return this.http.post<any>(ApiEndpoints.userAccount.login, credentials).pipe(
-      tap(response => {console.log('Login response:', response);
-        // Store the authentication data in local storage if login is successful
+  loginUser(credentials: { loginName: string; password: string }): Observable<LoginResponseModel> {
+    return this.http.post<LoginResponseModel>(ApiEndpoints.userAccount.login, credentials).pipe(
+      tap(response => {
         if (response && response.isLoginSuccess) {
-          localStorage.setItem('userTokenData', JSON.stringify(response));
+          this.setUser(response);
         }
       })
     );
   }
   
   registerUser(user: UserRegistrationModel): Observable<RegistrationResponseModel> {
-    return this.http.post<RegistrationResponseModel>(ApiEndpoints.userAccount.UserRegistration, user);
+    return this.http.post<RegistrationResponseModel>(ApiEndpoints.userAccount.UserRegistration, user).pipe(
+      tap(response => {
+        // Optionally, auto-login after registration if API returns token
+        // if (response && response.) {
+        //   this.setUser(response as any);
+        // }
+      })
+    );
   }
 }
