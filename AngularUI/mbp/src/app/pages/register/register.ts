@@ -2,12 +2,10 @@ import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-// import { UserRegistrationServiceTsService } from '../../services/user-registration.service.ts.service';
-// import { UserRegistrationModel } from '../../models/UserRegistrationModel'; // Import the UserRegistrationModel;
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { UserRegistrationModel } from '../../models/UserRegistrationModel';
-import { UserAccoutService } from '../../services/user-accout-service';
-
+import { AuthService } from '../../services/auth.service';
+ 
 @Component({
   selector: 'app-register',
   imports: [CommonModule, ReactiveFormsModule, RouterModule, HttpClientModule],
@@ -24,7 +22,7 @@ export class Register {
 
   // Define the form controls and their initial values
 
-  constructor(private fb: FormBuilder,   private userService: UserAccoutService, private router: Router) {
+  constructor(private fb: FormBuilder,   private auth: AuthService, private router: Router) {
     this.registerForm = this.fb.group({
       firstName: ['Ankit', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
       lastName: ['Sahay', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
@@ -75,15 +73,15 @@ export class Register {
         roles: formValue.roles ? formValue.roles.split(',').map((role: string) => role.trim()) : []
       };
 
-      this.userService.registerUser(user).subscribe({
+      this.auth.registerUser(user).subscribe({
         next: (response) => {
           console.log('Registration Response:', response);
           if (response.isCreated) {
             this.notificationMessage.set(response.successMessages?.join(', ') || 'Registration Successful!');
             this.isSuccess.set(true);
             this.registerForm.reset();
-            // Automatically log in the user after successful registration 
-            this.userService.loginUser({loginName: user.email,password: user.password}).subscribe({
+            // Automatically log in the user after successful registration
+            this.auth.loginUser({ loginName: user.email, password: user.password }).subscribe({
               next: (response) => {
                 console.log('Login Response:', response);
                 setTimeout(() => this.router.navigate(['/home']), 2000);

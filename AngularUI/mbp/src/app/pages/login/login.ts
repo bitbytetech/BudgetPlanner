@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { UserAccoutService } from '../../services/user-accout-service';
 import { AuthService } from '../../services/auth.service';
  
 @Component({
@@ -20,7 +19,7 @@ export class Login {
   isSuccess = signal(false);
   isLoading = signal(false);
 
-  constructor(private fb: FormBuilder, private userService: UserAccoutService, private auth: AuthService, private router: Router) {
+  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
     this.loginForm = this.fb.group({
       loginName: ['', [Validators.required, Validators.email]],
       password: ['',
@@ -34,7 +33,7 @@ export class Login {
     if (this.loginForm.valid) {
       this.isLoading.set(true);
       this.notification.set(null);
-      this.userService.loginUser(this.loginForm.value).subscribe({
+      this.auth.loginUser(this.loginForm.value).subscribe({
         next: (response) => {
           this.isLoading.set(false);
           if (response && response.isLoginSuccess) {
