@@ -1,7 +1,7 @@
-import { Component, computed, signal, OnInit, effect } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterOutlet ,RouterLinkActive} from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { LoginResponseModel } from './models/LoginResponseModel';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -10,42 +10,21 @@ import { LoginResponseModel } from './models/LoginResponseModel';
   styleUrl: './app.scss'
 })
 export class App implements OnInit {
-  protected title = signal('mbp'); 
-  userTokenData = signal<LoginResponseModel | null>(null);
-   constructor(private router: Router) {
-     effect(() => {
-      const data = localStorage.getItem('userTokenData');
-      this.userTokenData.set(data ? JSON.parse(data) : null);
-    });
-    }
-
-  isLoggedIn = computed(() => {
-    const user = this.userTokenData();
-    return user ? user.isLoginSuccess : false;
-  });
+   constructor(public auth: AuthService, private router: Router) {}
   ngOnInit(): void {
-    this.loadUser();
-    console.log('App isLoggedIn status ', this.isLoggedIn());
-    const user = this.userTokenData();
-  //    this.userName.set(user ? user.fullName : '');
+    throw new Error('Method not implemented.');
   }
 
-  loadUser() {
-    const data = localStorage.getItem('userTokenData');
-    if (data) {
-      try {
-        this.userTokenData.set(JSON.parse(data));
-      } catch {
-        this.userTokenData.set(null);
-      }
-    } else {
-      this.userTokenData.set(null);
-    }
+  get userTokenData() {
+    return this.auth.userTokenData();
+  }
+
+  get isLoggedIn() {
+    return this.auth.isLoggedIn();
   }
 
   logout() {
-    localStorage.removeItem('userTokenData');
-    this.userTokenData.set(null);
+    this.auth.logout();
     this.router.navigate(['/login']);
   }
 }

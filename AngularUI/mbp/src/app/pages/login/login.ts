@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { UserAccoutService } from '../../services/user-accout-service';
+import { AuthService } from '../../services/auth.service';
  
 @Component({
     selector: 'app-login',
@@ -19,7 +20,7 @@ export class Login {
   isSuccess = signal(false);
   isLoading = signal(false);
 
-  constructor(private fb: FormBuilder, private userService: UserAccoutService, private router: Router) {
+  constructor(private fb: FormBuilder, private userService: UserAccoutService, private auth: AuthService, private router: Router) {
     this.loginForm = this.fb.group({
       loginName: ['', [Validators.required, Validators.email]],
       password: ['',
@@ -37,6 +38,7 @@ export class Login {
         next: (response) => {
           this.isLoading.set(false);
           if (response && response.isLoginSuccess) {
+            this.auth.setUser(response); // update AuthService, triggers App update
             this.notification.set('Login successful!');
             this.isSuccess.set(true);
             setTimeout(() => this.router.navigate(['/categories-crud']), 1000);
