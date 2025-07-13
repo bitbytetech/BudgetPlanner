@@ -1,8 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-
+import { RouterModule } from '@angular/router'; 
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
  
@@ -22,10 +21,7 @@ export class Login {
   constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
     this.loginForm = this.fb.group({
       loginName: ['', [Validators.required, Validators.email]],
-      password: ['',
-        [Validators.required,
-        Validators.minLength(6),
-        ]]
+      password: ['',[Validators.required,Validators.minLength(6),]]
     });
   }
 
@@ -42,7 +38,7 @@ export class Login {
             this.isSuccess.set(true);
             setTimeout(() => this.router.navigate(['/categories-crud']), 1000);
           } else {
-            this.notification.set(  'Login failed. Please check your credentials.');
+            this.notification.set('Login failed. Please check your credentials.');
             this.isSuccess.set(false);
           }
         },

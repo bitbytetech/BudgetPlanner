@@ -7,17 +7,14 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  // Use signal for reactive user state
   userTokenData = signal<LoginResponseModel | null>(null);
- 
   constructor(private http: HttpClient) {
     this.loadUser();
   }
 
-  isLoggedIn = computed(() => {
-    const user = this.userTokenData();
-    return user ? user.isLoginSuccess : false;
-  });
-
+  // Computed property for login status
+  isLoggedIn = computed(() => !!this.userTokenData()?.isLoginSuccess);
   setUser(user: LoginResponseModel | null) {
     this.userTokenData.set(user);
     if (user) {
@@ -44,18 +41,16 @@ export class AuthService {
     this.setUser(null);
   }
 
-
-
   loginUser(credentials: { loginName: string; password: string }): Observable<LoginResponseModel> {
     return this.http.post<LoginResponseModel>(ApiEndpoints.userAccount.login, credentials).pipe(
       tap(response => {
-        if (response && response.isLoginSuccess) {
+        if (response?.isLoginSuccess) {
           this.setUser(response);
         }
       })
     );
   }
-  
+
   registerUser(user: UserRegistrationModel): Observable<RegistrationResponseModel> {
     return this.http.post<RegistrationResponseModel>(ApiEndpoints.userAccount.UserRegistration, user).pipe(
       tap(response => {
