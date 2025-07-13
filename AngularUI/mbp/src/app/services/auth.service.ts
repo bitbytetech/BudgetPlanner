@@ -60,9 +60,9 @@ export class AuthService {
     return this.http.post<RegistrationResponseModel>(ApiEndpoints.userAccount.UserRegistration, user).pipe(
       tap(response => {
         // Optionally, auto-login after registration if API returns token
-        // if (response && response.) {
-        //   this.setUser(response as any);
-        // }
+        if (response && response.isCreated) {
+          this.loginUser({ loginName: user.email, password: user.password });
+        }
       })
     );
   }
