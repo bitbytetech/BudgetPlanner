@@ -1,14 +1,13 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+import { Router, RouterModule } from '@angular/router'; 
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { UserRegistrationModel } from '../../models/UserRegistrationModel';
 import { AuthService } from '../../services/auth.service';
  
 @Component({
   selector: 'app-register',
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, HttpClientModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './register.html',
   styleUrl: './register.scss'
 })
@@ -16,10 +15,8 @@ export class Register {
 
  
   registerForm: FormGroup;
-  isSuccess = signal(false); // Using signal for isSuccess state
-  notificationMessage = signal<string | null>(null); // For displaying notification messages
-
-
+  isSuccess = signal(false); // Using signal for user registration status if user registration is successful.
+  notificationMessage = signal<string | null>(null); // For displaying notification messages  
   // Define the form controls and their initial values
 
   constructor(private fb: FormBuilder,   private auth: AuthService, private router: Router) {
