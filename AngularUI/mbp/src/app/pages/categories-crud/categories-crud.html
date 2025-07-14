@@ -73,10 +73,14 @@
       <td>{{ sub.allocatedAmount | currency:'INR':'symbol':'1.0-0' }}</td>
 
       <td>{{ getParentCategoryName(sub.parentId) }}</td>
-      <td>
-        <button class="btn btn-sm btn-info me-2" (click)="editCategory(sub)">Edit</button>
-        <button class="btn btn-sm btn-danger" (click)="deleteCategory(sub.uniqueId!)">Delete</button>
-      </td>
+ 
+       <td>
+  <div class="d-flex align-items-center gap-2">
+    <button class="btn btn-sm btn-info" (click)="editCategory(sub)">Edit</button>
+    <button class="btn btn-sm btn-danger" (click)="deleteCategory(sub.uniqueId!)">Delete</button>
+  </div>
+</td>
+
     </tr> <tr *ngIf="(cat.subCategories || []).length > 0" class="table-success">
       <td></td>
       <td style="padding-left: 2em;"><strong>Total</strong></td>
