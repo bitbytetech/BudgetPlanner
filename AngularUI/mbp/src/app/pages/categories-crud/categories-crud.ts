@@ -1,5 +1,5 @@
 
-import { Component, signal } from '@angular/core';
+import { Component, ElementRef, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CategoryService } from '../../services/category.service';
@@ -44,12 +44,19 @@ export class CategoriesCrudComponent {
     });
   }
 
+  @ViewChild('nameInput') nameInput!: ElementRef;
+
   editCategory(category: CategoryModel) {
     this.form.patchValue(category);
     this.isEditMode.set(true); 
     this.form.patchValue({ isSubCategory: !!category.parentId && category.parentId !== 0 });
-    this.form.patchValue(category);  
-  }
+
+  // focus the name input without scrolling
+  setTimeout(() => {
+    this.nameInput?.nativeElement.focus();
+  });
+}
+
 
   clearForm() {
     this.form.reset({ allocatedAmount: 0 });
