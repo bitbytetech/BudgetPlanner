@@ -2,6 +2,7 @@
 using BudgetPlannerApi.DB.Models.User;
 using BudgetPlannerApplication_2025.Models;
 using Microsoft.EntityFrameworkCore;
+using BudgetPlannerApi.DB.Models;
 
 namespace Bpst.API.DB
 {
@@ -66,5 +67,6 @@ namespace Bpst.API.DB
         public DbSet<Category> Categories { get; set; }
         public DbSet<Expense> Expenses { get; set; }
         public DbSet<WishList> WishLists { get; set; }
+        public DbSet<BudgetPlannerApi.DB.Models.IncomeSource> IncomeSource { get; set; } = default!;
     }
 }
