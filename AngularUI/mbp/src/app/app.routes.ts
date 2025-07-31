@@ -7,6 +7,7 @@ import { CategoriesCrudComponent } from './pages/categories-crud/categories-crud
 import { Logout } from './pages/logout/logout';
 import { ExpensesComponent } from './pages/expenses/expenses';
 import { WishlistFormComponent } from './pages/wishlist/wishlist';
+import { MonthlyIncome } from './pages/monthly-income/monthly-income';
   
 
 
@@ -20,6 +21,8 @@ import { WishlistFormComponent } from './pages/wishlist/wishlist';
     {path: 'logout', component: Logout},
         { path: 'categories-crud', component: CategoriesCrudComponent },
         { path: 'wishlist', component: WishlistFormComponent },
+        { path: 'income', component: MonthlyIncome },
+        
 
 
     ];
