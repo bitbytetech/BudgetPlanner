@@ -1,7 +1,6 @@
 import { Home } from './pages/home/home'; 
 import { Register } from './pages/register/register';
-import { Login } from './pages/login/login';
-import { ExpenseCategories } from './pages/expense-categories/expense-categories';
+import { Login } from './pages/login/login'; 
 import { MonthlyIncome } from './pages/monthly-income/monthly-income';
 import { MonthlyExpensePlan } from './pages/monthly-expense-plan/monthly-expense-plan';
 import { MonthlyExpenses } from './pages/monthly-expenses/monthly-expenses';
@@ -14,7 +13,6 @@ export const routes: Routes = [
   { path: 'home', component: Home },
   { path: 'register', component: Register  },
   { path: 'login', component: Login },
-  { path: 'expense-categories', component:  ExpenseCategories },
   { path: 'categories', component:  Categories },
   { path: 'monthly-income', component: MonthlyIncome },
   { path: 'monthly-expense-plan', component: MonthlyExpensePlan },

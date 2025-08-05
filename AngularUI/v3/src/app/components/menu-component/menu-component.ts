@@ -12,6 +12,3 @@ import { CommonModule } from '@angular/common';
 export class MenuComponent {
    constructor( public auth: AuthService, private router: Router) {}
 }
-
-
-
