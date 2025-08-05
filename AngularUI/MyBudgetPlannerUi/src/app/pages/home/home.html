@@ -1,0 +1,1265 @@
+  <div id="app">
+        <!-- Sidebar Toggle Button (Mobile) -->
+        <button class="btn btn-primary rounded-circle toggle-sidebar" id="sidebarToggle">
+            <i class="bi bi-list"></i>
+        </button>
+        
+        <!-- Sidebar -->
+      
+        <!-- Main Content -->
+        <main class="main-content" id="main-content">
+            <!-- Pages will be dynamically loaded here -->
+            
+            <!-- Dashboard Page -->
+            <div class="page" id="dashboard-page">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="mb-0">Dashboard</h2>
+                    <div>
+                        <button class="btn btn-primary" id="add-transaction-btn">
+                            <i class="bi bi-plus-lg"></i> Add Transaction
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Stats Cards -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card stat-card income">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="text-muted mb-1">Total Income</h6>
+                                        <h3 class="mb-0" id="total-income">$4,250.00</h3>
+                                        <small class="text-success">
+                                            <i class="bi bi-arrow-up"></i> 12% from last month
+                                        </small>
+                                    </div>
+                                    <div class="stat-icon">
+                                        <i class="bi bi-arrow-down-circle"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="card stat-card expense">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="text-muted mb-1">Total Expenses</h6>
+                                        <h3 class="mb-0" id="total-expenses">$2,840.00</h3>
+                                        <small class="text-danger">
+                                            <i class="bi bi-arrow-up"></i> 8% from last month
+                                        </small>
+                                    </div>
+                                    <div class="stat-icon">
+                                        <i class="bi bi-arrow-up-circle"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="card stat-card balance">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="text-muted mb-1">Balance</h6>
+                                        <h3 class="mb-0" id="total-balance">$1,410.00</h3>
+                                        <small class="text-primary">
+                                            <i class="bi bi-arrow-up"></i> 18% from last month
+                                        </small>
+                                    </div>
+                                    <div class="stat-icon">
+                                        <i class="bi bi-wallet2"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Charts Row -->
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Income vs Expenses</h5>
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-outline-primary active" data-period="week">Week</button>
+                                    <button class="btn btn-outline-primary" data-period="month">Month</button>
+                                    <button class="btn btn-outline-primary" data-period="year">Year</button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="incomeExpenseChart" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Expense Categories</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="categoryChart" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Budget Progress -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Budget Progress</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div>
+                                            <h6 class="mb-0">Monthly Budget</h6>
+                                            <small class="text-muted">$2,840 of $3,500</small>
+                                        </div>
+                                        <span class="badge bg-warning">81%</span>
+                                    </div>
+                                    <div class="progress budget-progress">
+                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 81%" aria-valuenow="81" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div>
+                                            <h6 class="mb-0">Housing</h6>
+                                            <small class="text-muted">$1,200 of $1,200</small>
+                                        </div>
+                                        <span class="badge bg-danger">100%</span>
+                                    </div>
+                                    <div class="progress budget-progress">
+                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div>
+                                            <h6 class="mb-0">Food & Dining</h6>
+                                            <small class="text-muted">$450 of $600</small>
+                                        </div>
+                                        <span class="badge bg-warning">75%</span>
+                                    </div>
+                                    <div class="progress budget-progress">
+                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div>
+                                            <h6 class="mb-0">Transportation</h6>
+                                            <small class="text-muted">$320 of $400</small>
+                                        </div>
+                                        <span class="badge bg-success">80%</span>
+                                    </div>
+                                    <div class="progress budget-progress">
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div>
+                                            <h6 class="mb-0">Entertainment</h6>
+                                            <small class="text-muted">$180 of $300</small>
+                                        </div>
+                                        <span class="badge bg-success">60%</span>
+                                    </div>
+                                    <div class="progress budget-progress">
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Transactions -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Recent Transactions</h5>
+                                <a href="#" class="btn btn-sm btn-outline-primary" data-page="transactions">View All</a>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-hover mb-0">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Description</th>
+                                                <th>Category</th>
+                                                <th>Amount</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="recent-transactions">
+                                            <tr class="transaction-item expense">
+                                                <td>May 15, 2023</td>
+                                                <td>Grocery Shopping</td>
+                                                <td><span class="badge bg-info category-badge">Food & Dining</span></td>
+                                                <td class="text-danger">-$120.50</td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                                                    <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                            <tr class="transaction-item income">
+                                                <td>May 14, 2023</td>
+                                                <td>Salary Deposit</td>
+                                                <td><span class="badge bg-success category-badge">Income</span></td>
+                                                <td class="text-success">+$2,500.00</td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                                                    <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                            <tr class="transaction-item expense">
+                                                <td>May 12, 2023</td>
+                                                <td>Electric Bill</td>
+                                                <td><span class="badge bg-warning category-badge">Utilities</span></td>
+                                                <td class="text-danger">-$85.20</td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                                                    <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                            <tr class="transaction-item expense">
+                                                <td>May 10, 2023</td>
+                                                <td>Netflix Subscription</td>
+                                                <td><span class="badge bg-danger category-badge">Entertainment</span></td>
+                                                <td class="text-danger">-$14.99</td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                                                    <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                            <tr class="transaction-item expense">
+                                                <td>May 8, 2023</td>
+                                                <td>Gas Station</td>
+                                                <td><span class="badge bg-primary category-badge">Transportation</span></td>
+                                                <td class="text-danger">-$45.75</td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                                                    <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Budgets Page -->
+            <div class="page d-none" id="budgets-page">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="mb-0">Budgets</h2>
+                    <div>
+                        <button class="btn btn-primary" id="add-budget-btn">
+                            <i class="bi bi-plus-lg"></i> Create Budget
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Monthly Budget</h5>
+                                <h6 class="text-muted mb-3">May 2023</h6>
+                                
+                                <div class="d-flex justify-content-between mb-3">
+                                    <div>
+                                        <p class="mb-0 text-muted">Budget</p>
+                                        <h4>$3,500.00</h4>
+                                    </div>
+                                    <div class="text-end">
+                                        <p class="mb-0 text-muted">Spent</p>
+                                        <h4>$2,840.00</h4>
+                                    </div>
+                                </div>
+                                
+                                <div class="progress mb-3" style="height: 10px;">
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 81%" aria-valuenow="81" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between">
+                                    <small class="text-muted">81% spent</small>
+                                    <small class="text-muted">$660.00 remaining</small>
+                                </div>
+                                
+                                <div class="d-flex mt-4">
+                                    <button class="btn btn-sm btn-outline-primary me-2">View Details</button>
+                                    <button class="btn btn-sm btn-outline-secondary me-2">Edit</button>
+                                    <button class="btn btn-sm btn-outline-danger">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Vacation Fund</h5>
+                                <h6 class="text-muted mb-3">Jan - Dec 2023</h6>
+                                
+                                <div class="d-flex justify-content-between mb-3">
+                                    <div>
+                                        <p class="mb-0 text-muted">Target</p>
+                                        <h4>$2,000.00</h4>
+                                    </div>
+                                    <div class="text-end">
+                                        <p class="mb-0 text-muted">Saved</p>
+                                        <h4>$850.00</h4>
+                                    </div>
+                                </div>
+                                
+                                <div class="progress mb-3" style="height: 10px;">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 42.5%" aria-valuenow="42.5" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between">
+                                    <small class="text-muted">42.5% saved</small>
+                                    <small class="text-muted">$1,150.00 to go</small>
+                                </div>
+                                
+                                <div class="d-flex mt-4">
+                                    <button class="btn btn-sm btn-outline-primary me-2">View Details</button>
+                                    <button class="btn btn-sm btn-outline-secondary me-2">Edit</button>
+                                    <button class="btn btn-sm btn-outline-danger">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Home Renovation</h5>
+                                <h6 class="text-muted mb-3">Mar - Aug 2023</h6>
+                                
+                                <div class="d-flex justify-content-between mb-3">
+                                    <div>
+                                        <p class="mb-0 text-muted">Budget</p>
+                                        <h4>$5,000.00</h4>
+                                    </div>
+                                    <div class="text-end">
+                                        <p class="mb-0 text-muted">Spent</p>
+                                        <h4>$1,200.00</h4>
+                                    </div>
+                                </div>
+                                
+                                <div class="progress mb-3" style="height: 10px;">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 24%" aria-valuenow="24" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between">
+                                    <small class="text-muted">24% spent</small>
+                                    <small class="text-muted">$3,800.00 remaining</small>
+                                </div>
+                                
+                                <div class="d-flex mt-4">
+                                    <button class="btn btn-sm btn-outline-primary me-2">View Details</button>
+                                    <button class="btn btn-sm btn-outline-secondary me-2">Edit</button>
+                                    <button class="btn btn-sm btn-outline-danger">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Transactions Page -->
+            <div class="page d-none" id="transactions-page">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="mb-0">Transactions</h2>
+                    <div>
+                        <button class="btn btn-outline-primary me-2" id="add-income-btn">
+                            <i class="bi bi-plus-lg"></i> Add Income
+                        </button>
+                        <button class="btn btn-primary" id="add-expense-btn">
+                            <i class="bi bi-plus-lg"></i> Add Expense
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label class="form-label">Date Range</label>
+                                <select class="form-select">
+                                    <option>This Month</option>
+                                    <option>Last Month</option>
+                                    <option>Last 3 Months</option>
+                                    <option>Custom Range</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Type</label>
+                                <select class="form-select">
+                                    <option>All Transactions</option>
+                                    <option>Income</option>
+                                    <option>Expense</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Category</label>
+                                <select class="form-select">
+                                    <option>All Categories</option>
+                                    <option>Food & Dining</option>
+                                    <option>Transportation</option>
+                                    <option>Housing</option>
+                                    <option>Entertainment</option>
+                                    <option>Utilities</option>
+                                    <option>Income</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Sort By</label>
+                                <select class="form-select">
+                                    <option>Date (Newest)</option>
+                                    <option>Date (Oldest)</option>
+                                    <option>Amount (High to Low)</option>
+                                    <option>Amount (Low to High)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Description</th>
+                                        <th>Category</th>
+                                        <th>Amount</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="transaction-item income">
+                                        <td>May 30, 2023</td>
+                                        <td>Freelance Project</td>
+                                        <td><span class="badge bg-success category-badge">Income</span></td>
+                                        <td class="text-success">+$750.00</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr class="transaction-item expense">
+                                        <td>May 28, 2023</td>
+                                        <td>Restaurant Dinner</td>
+                                        <td><span class="badge bg-info category-badge">Food & Dining</span></td>
+                                        <td class="text-danger">-$65.80</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr class="transaction-item expense">
+                                        <td>May 25, 2023</td>
+                                        <td>Internet Bill</td>
+                                        <td><span class="badge bg-warning category-badge">Utilities</span></td>
+                                        <td class="text-danger">-$59.99</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr class="transaction-item expense">
+                                        <td>May 20, 2023</td>
+                                        <td>Uber Ride</td>
+                                        <td><span class="badge bg-primary category-badge">Transportation</span></td>
+                                        <td class="text-danger">-$24.50</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr class="transaction-item expense">
+                                        <td>May 18, 2023</td>
+                                        <td>Movie Tickets</td>
+                                        <td><span class="badge bg-danger category-badge">Entertainment</span></td>
+                                        <td class="text-danger">-$32.00</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr class="transaction-item expense">
+                                        <td>May 15, 2023</td>
+                                        <td>Grocery Shopping</td>
+                                        <td><span class="badge bg-info category-badge">Food & Dining</span></td>
+                                        <td class="text-danger">-$120.50</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr class="transaction-item income">
+                                        <td>May 14, 2023</td>
+                                        <td>Salary Deposit</td>
+                                        <td><span class="badge bg-success category-badge">Income</span></td>
+                                        <td class="text-success">+$2,500.00</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr class="transaction-item expense">
+                                        <td>May 12, 2023</td>
+                                        <td>Electric Bill</td>
+                                        <td><span class="badge bg-warning category-badge">Utilities</span></td>
+                                        <td class="text-danger">-$85.20</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr class="transaction-item expense">
+                                        <td>May 10, 2023</td>
+                                        <td>Netflix Subscription</td>
+                                        <td><span class="badge bg-danger category-badge">Entertainment</span></td>
+                                        <td class="text-danger">-$14.99</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr class="transaction-item expense">
+                                        <td>May 8, 2023</td>
+                                        <td>Gas Station</td>
+                                        <td><span class="badge bg-primary category-badge">Transportation</span></td>
+                                        <td class="text-danger">-$45.75</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <nav>
+                            <ul class="pagination justify-content-center mb-0">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                </li>
+                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Categories Page -->
+            <div class="page d-none" id="categories-page">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="mb-0">Categories</h2>
+                    <div>
+                        <button class="btn btn-primary" id="add-category-btn">
+                            <i class="bi bi-plus-lg"></i> Add Category
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Expense Categories</h5>
+                            </div>
+                            <div class="card-body p-0">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center">
+                                            <span class="badge bg-info me-3" style="width: 20px; height: 20px;"></span>
+                                            <span>Food & Dining</span>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center">
+                                            <span class="badge bg-primary me-3" style="width: 20px; height: 20px;"></span>
+                                            <span>Transportation</span>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center">
+                                            <span class="badge bg-warning me-3" style="width: 20px; height: 20px;"></span>
+                                            <span>Utilities</span>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center">
+                                            <span class="badge bg-danger me-3" style="width: 20px; height: 20px;"></span>
+                                            <span>Entertainment</span>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center">
+                                            <span class="badge bg-secondary me-3" style="width: 20px; height: 20px;"></span>
+                                            <span>Housing</span>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center">
+                                            <span class="badge bg-dark me-3" style="width: 20px; height: 20px;"></span>
+                                            <span>Healthcare</span>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Income Categories</h5>
+                            </div>
+                            <div class="card-body p-0">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center">
+                                            <span class="badge bg-success me-3" style="width: 20px; height: 20px;"></span>
+                                            <span>Salary</span>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center">
+                                            <span class="badge bg-info me-3" style="width: 20px; height: 20px;"></span>
+                                            <span>Freelance</span>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center">
+                                            <span class="badge bg-primary me-3" style="width: 20px; height: 20px;"></span>
+                                            <span>Investments</span>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center">
+                                            <span class="badge bg-warning me-3" style="width: 20px; height: 20px;"></span>
+                                            <span>Gifts</span>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Reports Page -->
+            <div class="page d-none" id="reports-page">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="mb-0">Reports & Analytics</h2>
+                    <div>
+                        <button class="btn btn-outline-primary">
+                            <i class="bi bi-download"></i> Export Data
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Report Type</label>
+                                <select class="form-select" id="report-type">
+                                    <option value="income-expense">Income vs Expenses</option>
+                                    <option value="category">Spending by Category</option>
+                                    <option value="monthly">Monthly Comparison</option>
+                                    <option value="trends">Spending Trends</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Time Period</label>
+                                <select class="form-select" id="report-period">
+                                    <option value="month">This Month</option>
+                                    <option value="quarter">Last 3 Months</option>
+                                    <option value="year">This Year</option>
+                                    <option value="custom">Custom Range</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Chart Type</label>
+                                <select class="form-select" id="chart-type">
+                                    <option value="bar">Bar Chart</option>
+                                    <option value="line">Line Chart</option>
+                                    <option value="pie">Pie Chart</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Income vs Expenses (2023)</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="reportChart" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Summary</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <h6 class="text-muted">Total Income</h6>
+                                    <h3 class="text-success">$12,750.00</h3>
+                                </div>
+                                <div class="mb-3">
+                                    <h6 class="text-muted">Total Expenses</h6>
+                                    <h3 class="text-danger">$8,640.00</h3>
+                                </div>
+                                <div class="mb-3">
+                                    <h6 class="text-muted">Net Savings</h6>
+                                    <h3 class="text-primary">$4,110.00</h3>
+                                </div>
+                                <div>
+                                    <h6 class="text-muted">Savings Rate</h6>
+                                    <h3 class="text-info">32.2%</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Top Spending Categories</h5>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table mb-0">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Category</th>
+                                                <th>Amount</th>
+                                                <th>% of Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Housing</td>
+                                                <td>$3,600.00</td>
+                                                <td>41.7%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Food & Dining</td>
+                                                <td>$1,850.00</td>
+                                                <td>21.4%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Transportation</td>
+                                                <td>$1,200.00</td>
+                                                <td>13.9%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Utilities</td>
+                                                <td>$850.00</td>
+                                                <td>9.8%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Entertainment</td>
+                                                <td>$650.00</td>
+                                                <td>7.5%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Healthcare</td>
+                                                <td>$490.00</td>
+                                                <td>5.7%</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Monthly Comparison</h5>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table mb-0">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Month</th>
+                                                <th>Income</th>
+                                                <th>Expenses</th>
+                                                <th>Savings</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>May 2023</td>
+                                                <td class="text-success">$3,250.00</td>
+                                                <td class="text-danger">$2,840.00</td>
+                                                <td>$410.00</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Apr 2023</td>
+                                                <td class="text-success">$3,250.00</td>
+                                                <td class="text-danger">$2,650.00</td>
+                                                <td>$600.00</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Mar 2023</td>
+                                                <td class="text-success">$3,250.00</td>
+                                                <td class="text-danger">$2,150.00</td>
+                                                <td>$1,100.00</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Feb 2023</td>
+                                                <td class="text-success">$3,000.00</td>
+                                                <td class="text-danger">$2,000.00</td>
+                                                <td>$1,000.00</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Jan 2023</td>
+                                                <td class="text-success">$3,000.00</td>
+                                                <td class="text-danger">$2,000.00</td>
+                                                <td>$1,000.00</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Goals Page -->
+            <div class="page d-none" id="goals-page">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="mb-0">Savings Goals</h2>
+                    <div>
+                        <button class="btn btn-primary" id="add-goal-btn">
+                            <i class="bi bi-plus-lg"></i> Create Goal
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="card-title mb-0">Vacation Fund</h5>
+                                    <span class="badge bg-success">On Track</span>
+                                </div>
+                                
+                                <div class="text-center mb-4">
+                                    <div class="position-relative d-inline-block">
+                                        <svg width="120" height="120" viewBox="0 0 120 120">
+                                            <circle cx="60" cy="60" r="54" fill="none" stroke="#e9ecef" stroke-width="12" />
+                                            <circle cx="60" cy="60" r="54" fill="none" stroke="#4cc9f0" stroke-width="12" stroke-dasharray="339.3" stroke-dashoffset="195" />
+                                        </svg>
+                                        <div class="position-absolute top-50 start-50 translate-middle">
+                                            <h3 class="mb-0">42%</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between mb-3">
+                                    <div>
+                                        <p class="mb-0 text-muted">Target</p>
+                                        <h4>$2,000.00</h4>
+                                    </div>
+                                    <div class="text-end">
+                                        <p class="mb-0 text-muted">Saved</p>
+                                        <h4>$850.00</h4>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between mb-3">
+                                    <small class="text-muted">Started: Jan 15, 2023</small>
+                                    <small class="text-muted">Target: Dec 31, 2023</small>
+                                </div>
+                                
+                                <div class="d-flex">
+                                    <button class="btn btn-sm btn-outline-primary me-2">Add Funds</button>
+                                    <button class="btn btn-sm btn-outline-secondary me-2">Edit</button>
+                                    <button class="btn btn-sm btn-outline-danger">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="card-title mb-0">Emergency Fund</h5>
+                                    <span class="badge bg-warning">Behind</span>
+                                </div>
+                                
+                                <div class="text-center mb-4">
+                                    <div class="position-relative d-inline-block">
+                                        <svg width="120" height="120" viewBox="0 0 120 120">
+                                            <circle cx="60" cy="60" r="54" fill="none" stroke="#e9ecef" stroke-width="12" />
+                                            <circle cx="60" cy="60" r="54" fill="none" stroke="#f8961e" stroke-width="12" stroke-dasharray="339.3" stroke-dashoffset="271.4" />
+                                        </svg>
+                                        <div class="position-absolute top-50 start-50 translate-middle">
+                                            <h3 class="mb-0">20%</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between mb-3">
+                                    <div>
+                                        <p class="mb-0 text-muted">Target</p>
+                                        <h4>$10,000.00</h4>
+                                    </div>
+                                    <div class="text-end">
+                                        <p class="mb-0 text-muted">Saved</p>
+                                        <h4>$2,000.00</h4>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between mb-3">
+                                    <small class="text-muted">Started: Mar 1, 2023</small>
+                                    <small class="text-muted">Target: Mar 1, 2024</small>
+                                </div>
+                                
+                                <div class="d-flex">
+                                    <button class="btn btn-sm btn-outline-primary me-2">Add Funds</button>
+                                    <button class="btn btn-sm btn-outline-secondary me-2">Edit</button>
+                                    <button class="btn btn-sm btn-outline-danger">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="card-title mb-0">New Laptop</h5>
+                                    <span class="badge bg-success">On Track</span>
+                                </div>
+                                
+                                <div class="text-center mb-4">
+                                    <div class="position-relative d-inline-block">
+                                        <svg width="120" height="120" viewBox="0 0 120 120">
+                                            <circle cx="60" cy="60" r="54" fill="none" stroke="#e9ecef" stroke-width="12" />
+                                            <circle cx="60" cy="60" r="54" fill="none" stroke="#4361ee" stroke-width="12" stroke-dasharray="339.3" stroke-dashoffset="135.7" />
+                                        </svg>
+                                        <div class="position-absolute top-50 start-50 translate-middle">
+                                            <h3 class="mb-0">60%</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between mb-3">
+                                    <div>
+                                        <p class="mb-0 text-muted">Target</p>
+                                        <h4>$1,500.00</h4>
+                                    </div>
+                                    <div class="text-end">
+                                        <p class="mb-0 text-muted">Saved</p>
+                                        <h4>$900.00</h4>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between mb-3">
+                                    <small class="text-muted">Started: Apr 10, 2023</small>
+                                    <small class="text-muted">Target: Aug 31, 2023</small>
+                                </div>
+                                
+                                <div class="d-flex">
+                                    <button class="btn btn-sm btn-outline-primary me-2">Add Funds</button>
+                                    <button class="btn btn-sm btn-outline-secondary me-2">Edit</button>
+                                    <button class="btn btn-sm btn-outline-danger">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Settings Page -->
+            <div class="page d-none" id="settings-page">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="mb-0">Settings</h2>
+                    <div>
+                        <button class="btn btn-primary" id="save-settings-btn">
+                            <i class="bi bi-save"></i> Save Changes
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Profile Settings</h5>
+                            </div>
+                            <div class="card-body">
+                                <form>
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">First Name</label>
+                                            <input type="text" class="form-control" value="John">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Last Name</label>
+                                            <input type="text" class="form-control" value="Doe">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control" value="john.doe@example.com">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Phone Number</label>
+                                        <input type="tel" class="form-control" value="(555) 123-4567">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Security</h5>
+                            </div>
+                            <div class="card-body">
+                                <form>
+                                    <div class="mb-3">
+                                        <label class="form-label">Current Password</label>
+                                        <input type="password" class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">New Password</label>
+                                        <input type="password" class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Confirm New Password</label>
+                                        <input type="password" class="form-control">
+                                    </div>
+                                    <button type="button" class="btn btn-primary">Change Password</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Preferences</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Currency</label>
+                                    <select class="form-select">
+                                        <option selected>USD ($)</option>
+                                        <option>EUR (€)</option>
+                                        <option>GBP (£)</option>
+                                        <option>JPY (¥)</option>
+                                        <option>CAD ($)</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Date Format</label>
+                                    <select class="form-select">
+                                        <option selected>MM/DD/YYYY</option>
+                                        <option>DD/MM/YYYY</option>
+                                        <option>YYYY-MM-DD</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Theme</label>
+                                    <select class="form-select">
+                                        <option selected>Light</option>
+                                        <option>Dark</option>
+                                        <option>System Default</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Notifications</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input" type="checkbox" id="emailNotif" checked>
+                                    <label class="form-check-label" for="emailNotif">Email Notifications</label>
+                                </div>
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input" type="checkbox" id="budgetAlert" checked>
+                                    <label class="form-check-label" for="budgetAlert">Budget Alerts</label>
+                                </div>
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input" type="checkbox" id="goalReminder" checked>
+                                    <label class="form-check-label" for="goalReminder">Goal Reminders</label>
+                                </div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="monthlyReport" checked>
+                                    <label class="form-check-label" for="monthlyReport">Monthly Reports</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Login Page -->
+            <div class="page d-none" id="login-page">
+                <div class="auth-container">
+                    <div class="card auth-card">
+                        <div class="auth-header">
+                            <h3 class="mb-0">Welcome to BudgetMaster</h3>
+                            <p class="mb-0">Sign in to continue to your dashboard</p>
+                        </div>
+                        <div class="auth-body">
+                            <form id="login-form">
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" placeholder="Enter your email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Password</label>
+                                    <input type="password" class="form-control" placeholder="Enter your password" required>
+                                </div>
+                                <div class="d-flex justify-content-between mb-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="remember-me">
+                                        <label class="form-check-label" for="remember-me">Remember me</label>
+                                    </div>
+                                    <a href="#" class="text-primary">Forgot password?</a>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100 mb-3">Sign In</button>
+                                <p class="text-center mb-0">Don't have an account? <a href="#" class="text-primary" id="go-to-register">Sign up</a></p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Register Page -->
+            <div class="page d-none" id="register-page">
+                <div class="auth-container">
+                    <div class="card auth-card">
+                        <div class="auth-header">
+                            <h3 class="mb-0">Create an Account</h3>
+                            <p class="mb-0">Get started with BudgetMaster</p>
+                        </div>
+                        <div class="auth-body">
+                            <form id="register-form">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">First Name</label>
+                                        <input type="text" class="form-control" placeholder="Enter first name" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" placeholder="Enter last name" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" placeholder="Enter your email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Password</label>
+                                    <input type="password" class="form-control" placeholder="Create a password" required>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label">Confirm Password</label>
+                                    <input type="password" class="form-control" placeholder="Confirm your password" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100 mb-3">Create Account</button>
+                                <p class="text-center mb-0">Already have an account? <a href="#" class="text-primary" id="go-to-login">Sign in</a></p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
