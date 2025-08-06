@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterOutlet ,RouterLinkActive} from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AuthService } from './services/auth-service';
 import { MenuComponent } from "./components/menu-component/menu-component";
+import { AuthService } from './services/auth.service';
 @Component({
   selector: 'app-root',
   standalone: true,

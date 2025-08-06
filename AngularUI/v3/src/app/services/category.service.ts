@@ -5,8 +5,7 @@ import { CategoryModel } from '../models/CategoryModel';
 import { ApiEndpoints } from '../core/constants/api-endpoints';
     
 
-@Injectable({  providedIn: 'root'})
-
+@Injectable({ providedIn: 'root' })
 export class CategoryService {
   private apiUrl = ApiEndpoints.Categories.getAllCategories;
 

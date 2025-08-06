@@ -1,14 +1,20 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../../services/auth-service';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-menu-component',
-  imports: [ CommonModule, RouterLink, RouterLinkActive ],
+  standalone: true,
+  imports: [CommonModule, RouterLink, RouterLinkActive],
   templateUrl: './menu-component.html',
-  styleUrl: './menu-component.scss',
+  styleUrls: ['./menu-component.scss']
 })
 export class MenuComponent {
-   constructor( public auth: AuthService, private router: Router) {}
+  constructor(public auth: AuthService, private router: Router) {}
+
+  logout() {
+    this.auth.logout();
+    this.router.navigate(['/login']);
+  }
 }

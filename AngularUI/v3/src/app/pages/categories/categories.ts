@@ -2,7 +2,7 @@ import { Component, ElementRef, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CategoryModel } from '../../models/CategoryModel';
-import { CategoryService } from '../../services/category-service';
+import { CategoryService } from '../../services/category.service';
 
 @Component({
   selector: 'app-categories',

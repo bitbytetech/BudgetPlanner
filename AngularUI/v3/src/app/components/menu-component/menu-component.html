@@ -25,24 +25,25 @@
                         </a>
                     </li>
                 
-                         
-                    <li class="nav-item">
-                        <a class="nav-link" routerLink="/categories" routerLinkActive="active-link">Categories</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" routerLink="/monthly-expenses" routerLinkActive="monthly-expenses">Transactions</a>
-                    </li>
+               
+                 
                     <li class="nav-item">
                         <a class="nav-link active" routerLink="/categories" routerLinkActive="active-link">Categories</a>
                     </li>
                      <li class="nav-item">
                         <a class="nav-link" routerLink="/wishlist" routerLinkActive="active-link">wishlist</a>
                     </li>
+                         <li class="nav-item">
+                        <a class="nav-link" routerLink="/expenses" routerLinkActive="active-link">Expenses</a>
+                    </li>
                      <li class="nav-item">
-                        <a class="nav-link" routerLink="/monthly-income" routerLinkActive="active-link">monthly-income</a>
+                        <a class="nav-link" routerLink="/income" routerLinkActive="active-link">monthly-income</a>
+                    </li>
+                       <li class="nav-item">
+                        <a class="nav-link" routerLink="/monthly-expenses" routerLinkActive="monthly-expenses">Transactions</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" routerLink="/wishlist" routerLinkActive="active-link">
+                        <a class="nav-link" routerLink="#" routerLinkActive="active-link">
                             <i class="bi bi-bar-chart"></i> Reports
                         </a>
                     </li>
@@ -59,11 +60,18 @@
                 </ul>
                 
                 <hr class="my-3">
-                
-                <div class="px-3">
-                    <button class="btn btn-outline-danger w-100" id="logout-btn">
-                        <i class="bi bi-box-arrow-right"></i> Logout
-                    </button>
-                </div>
+              <div class="px-3">
+  <li class="nav-item" style="list-style: none;">
+    <button
+      (click)="logout()"
+      class="btn btn-outline-danger w-100"
+      style="text-align: left;"
+    >
+      Logout
+    </button>
+  </li>
+</div>
+
+
             </div>
         </nav>

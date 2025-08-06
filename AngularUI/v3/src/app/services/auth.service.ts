@@ -1,28 +1,30 @@
-import { Injectable, signal, computed, inject } from '@angular/core';
-import { LoginResponseModel } from '../models/LoginResponseModel';
-import { ApiEndpoints } from '../core/constants/api-endpoints';
-import { Observable, tap } from 'rxjs';
-import { RegistrationResponseModel, UserRegistrationModel } from '../models/UserRegistrationModel';
-import { HttpClient } from '@angular/common/http';
+import { Injectable, Inject, PLATFORM_ID, signal, computed } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { PLATFORM_ID, Inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
+
+import { ApiEndpoints } from '../core/constants/api-endpoints';
+import { LoginResponseModel } from '../models/LoginResponseModel';
+import { UserRegistrationModel, RegistrationResponseModel } from '../models/UserRegistrationModel';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private isBrowser: boolean;
-
   userTokenData = signal<LoginResponseModel | null>(null);
+  isBrowser: boolean;
 
   constructor(
     private http: HttpClient,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
-    this.loadUser();
+    if (this.isBrowser) {
+      this.loadUser();
+    }
   }
 
+  // Computed property to track login state
   isLoggedIn = computed(() => !!this.userTokenData()?.isLoginSuccess);
- 
+
   setUser(user: LoginResponseModel | null) {
     this.userTokenData.set(user);
     if (this.isBrowser) {
@@ -67,11 +69,10 @@ export class AuthService {
     return this.http.post<RegistrationResponseModel>(ApiEndpoints.userAccount.UserRegistration, user).pipe(
       tap(response => {
         if (response && response.isCreated) {
-          this.loginUser({ loginName: user.email, password: user.password });
+          // optional: consider awaiting login instead of calling it fire-and-forget
+          this.loginUser({ loginName: user.email, password: user.password }).subscribe();
         }
       })
     );
   }
-
-  
 }

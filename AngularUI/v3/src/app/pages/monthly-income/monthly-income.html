@@ -1,1 +1,72 @@
-<p>monthly-income works!</p>
+<div class="container my-5">
+  <div class="card shadow-sm border-0">
+    <div class="card-body p-4">
+      <h1>Monthly Income</h1>
+
+      <!-- ✅ Success Message -->
+      <div *ngIf="message" class="alert alert-success" role="alert">
+        {{ message }}
+      </div>
+
+      <!-- ✅ Form to Add Income -->
+      <form (ngSubmit)="addIncome()" #incomeForm="ngForm">
+        <div class="row g-4">
+          <div class="col-sm-12 col-md-6 col-lg-4">
+            <label for="source" class="form-label">Income Source</label>
+            <input
+              type="text"
+              class="form-control"
+              id="source"
+              [(ngModel)]="source"
+              name="source"
+              required
+            />
+          </div>
+          <div class="col-sm-12 col-md-6 col-lg-4">
+            <label for="amount" class="form-label">Amount</label>
+            <input
+              type="number"
+              class="form-control"
+              id="amount"
+              [(ngModel)]="amount"
+              name="amount"
+              required
+              min="1"
+            />
+          </div>
+        </div>
+
+        <div class="mt-4 d-flex justify-content-end">
+          <button type="submit" class="btn btn-primary" [disabled]="incomeForm.invalid">
+            Add Income
+          </button>
+        </div>
+      </form>
+
+      <!-- ✅ Income List Table -->
+      <div class="mt-4" *ngIf="incomes.length > 0">
+        <h2>Income List</h2>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Source</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let income of incomes; index as i">
+              <td>{{ i + 1 }}</td>
+              <td>{{ income.source }}</td>
+              <td>{{ income.amount }} Rs</td>
+              <td>
+                <button class="btn btn-danger btn-sm" (click)="deleteIncome(income.id)">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
