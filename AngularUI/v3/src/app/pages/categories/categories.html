@@ -55,70 +55,57 @@
         </div>
         <div class="card-body p-0">
           <div class="table-responsive">
-            <table class="table table-hover mb-0">
+            <table class="table-sm table-hover mb-0" style="width: 100%;" >
               <thead class="table-light">
                 <tr>
                   <th>S.No.</th>
                   <th>Name</th>
                   <th>Description</th>
                   <th>Allocated Amount</th>
-                  <th>Parent ID</th>
-                  <th>Actions</th>
+                   <th>Actions</th>
                 </tr>
 
               </thead>
               <tbody id="recent-transactions">
-                <tr class="transaction-item expense">
-                  <td>May 8, 2023</td>
-                  <td>Gas Station</td>
-                  <td><span class="badge bg-primary category-badge">Transportation</span></td>
-                  <td class="text-danger">-$45.75</td>
-                  <td>
-                    <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
-                    <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
-                  </td>
-                </tr>
+                
 
-                <ng-container *ngFor="let cat of categories()">
-                  <tr *ngIf="cat.parentId === 0 || cat.parentId == null" class="transaction-item expense">
-                    <td>{{ cat.uniqueId }}</td>
-                    <td>{{ cat.name }}</td>
-                    <td>{{ cat.description }}</td>
-                    <td class="text-danger">{{ cat.allocatedAmount | currency:'INR':'symbol':'1.0-0' }}</td>
-
-                    <td>{{ getParentCategoryName(cat.parentId) }}</td>
-                    <td>
-                       <button class="btn btn-sm btn-outline-primary me-1" (click)="editCategory(cat)"><i class="bi bi-pencil"></i></button>
-                    <button class="btn btn-sm btn-outline-danger" (click)="deleteCategory(cat.uniqueId!)"><i class="bi bi-trash"></i></button>
-                  </td>
-                  </tr>
-                  <tr *ngFor="let sub of cat.subCategories || []" class=" transaction-item income">
-                    <td>{{ sub.uniqueId }}</td>
-                    <td style="padding-left: 2em;">↳ {{ sub.name }}</td>
-                    <td>{{ sub.description }}</td>
-                    <td class="text-success">{{ sub.allocatedAmount | currency:'INR':'symbol':'1.0-0' }}</td>
-
-                    <td>{{ getParentCategoryName(sub.parentId) }}</td>
-
-                    <td>
-                      <div class="d-flex align-items-center gap-2">
-                          <button class="btn btn-sm btn-outline-primary me-1" (click)="editCategory(sub)"><i class="bi bi-pencil"></i></button>
-                    <button class="btn btn-sm btn-outline-danger" (click)="deleteCategory(sub.uniqueId!)"><i class="bi bi-trash"></i></button>
-
-                        </div>
-                    </td>
-
-                  </tr>
-                  <tr *ngIf="(cat.subCategories || []).length > 0" class="table-success">
-                    <td></td>
-                    <td style="padding-left: 2em;"><strong>Total</strong></td>
-                    <td></td>
-                    <td><strong>{{ getTotalAllocatedAmount(cat.subCategories || []) |
-                        currency:'INR':'symbol':'1.0-0'}}</strong>
-                    </td>
-                    <td colspan="2"></td>
-                  </tr>
-                </ng-container>
+@for (cat of categories(); track cat.uniqueId) {
+  @if (cat.parentId === 0 || cat.parentId == null) {
+    <tr class="transaction-item expense">
+      <td>{{ cat.uniqueId }}</td>
+      <td>{{ cat.name }}</td>
+      <td>{{ cat.description }}</td>
+      <td class="text-danger">{{ cat.allocatedAmount | currency:'INR':'symbol':'1.0-0' }}</td>
+      <td>
+        <button class="btn btn-sm btn-outline-primary me-1" (click)="editCategory(cat)"><i class="bi bi-pencil"></i></button>
+        <button class="btn btn-sm btn-outline-danger" (click)="deleteCategory(cat.uniqueId!)"><i class="bi bi-trash"></i></button>
+      </td>
+    </tr>
+  }
+  @for (sub of cat.subCategories || []; track sub.uniqueId) {
+    <tr class="transaction-item income">
+      <td>{{ sub.uniqueId }}</td>
+      <td style="padding-left: 2em;">↳ {{ sub.name }}</td>
+      <td>{{ sub.description }}</td>
+      <td class="text-success">{{ sub.allocatedAmount | currency:'INR':'symbol':'1.0-0' }}</td>
+      <td>
+        <div class="d-flex align-items-center gap-2">
+          <button class="btn btn-sm btn-outline-primary me-1" (click)="editCategory(sub)"><i class="bi bi-pencil"></i></button>
+          <button class="btn btn-sm btn-outline-danger" (click)="deleteCategory(sub.uniqueId!)"><i class="bi bi-trash"></i></button>
+        </div>
+      </td>
+    </tr>
+  }
+  @if ((cat.subCategories || []).length > 0) {
+    <tr class="table-success">
+      <td></td>
+      <td style="padding-left: 2em;"><strong>Total</strong></td>
+      <td></td>
+      <td><strong>{{ getTotalAllocatedAmount(cat.subCategories || []) | currency:'INR':'symbol':'1.0-0'}}</strong></td>
+      <td colspan="2"></td>
+    </tr>
+  }
+}
                 <!-- <tr class="transaction-item expense">
                   <td>May 15, 2023</td>
                   <td>Grocery Shopping</td>
@@ -178,57 +165,5 @@
     </div>
   </div>
 
-
-  <table class="table table-bordered table-hover">
-    <thead class="table-light">
-      <tr>
-        <th>S.No.</th>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Allocated Amount</th>
-        <th>Parent ID</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <ng-container *ngFor="let cat of categories()">
-        <tr *ngIf="cat.parentId === 0 || cat.parentId == null" class="fw-bold">
-          <td>{{ cat.uniqueId }}</td>
-          <td>{{ cat.name }}</td>
-          <td>{{ cat.description }}</td>
-          <td>{{ cat.allocatedAmount | currency:'INR':'symbol':'1.0-0' }}</td>
-
-          <td>{{ getParentCategoryName(cat.parentId) }}</td>
-          <td>
-            <button class="btn btn-sm btn-info me-2" (click)="editCategory(cat)">Edit</button>
-            <button class="btn btn-sm btn-danger" (click)="deleteCategory(cat.uniqueId!)">Delete</button>
-          </td>
-        </tr>
-        <tr *ngFor="let sub of cat.subCategories || []" class="table-secondary">
-          <td>{{ sub.uniqueId }}</td>
-          <td style="padding-left: 2em;">↳ {{ sub.name }}</td>
-          <td>{{ sub.description }}</td>
-          <td>{{ sub.allocatedAmount | currency:'INR':'symbol':'1.0-0' }}</td>
-
-          <td>{{ getParentCategoryName(sub.parentId) }}</td>
-
-          <td>
-            <div class="d-flex align-items-center gap-2">
-              <button class="btn btn-sm btn-info" (click)="editCategory(sub)">Edit</button>
-              <button class="btn btn-sm btn-danger" (click)="deleteCategory(sub.uniqueId!)">Delete</button>
-            </div>
-          </td>
-
-        </tr>
-        <tr *ngIf="(cat.subCategories || []).length > 0" class="table-success">
-          <td></td>
-          <td style="padding-left: 2em;"><strong>Total</strong></td>
-          <td></td>
-          <td><strong>{{ getTotalAllocatedAmount(cat.subCategories || []) | currency:'INR':'symbol':'1.0-0'}}</strong>
-          </td>
-          <td colspan="2"></td>
-        </tr>
-      </ng-container>
-    </tbody>
-  </table>
+ 
 </div>
