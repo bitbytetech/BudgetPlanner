@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BudgetPlannerApi.Migrations
 {
     /// <inheritdoc />
-    public partial class reset : Migration
+    public partial class inital : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -70,10 +70,11 @@ namespace BudgetPlannerApi.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ParentId = table.Column<int>(type: "int", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AllocatedAmount = table.Column<int>(type: "int", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastUpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -82,8 +83,7 @@ namespace BudgetPlannerApi.Migrations
                         name: "FK_Categories_AppUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AppUsers",
-                        principalColumn: "UniqueId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "UniqueId");
                     table.ForeignKey(
                         name: "FK_Categories_Categories_ParentId",
                         column: x => x.ParentId,
@@ -93,15 +93,38 @@ namespace BudgetPlannerApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "IncomeSource",
+                columns: table => new
+                {
+                    UniqueId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: true),
+                    SourceName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IncomeAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastUpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IncomeSource", x => x.UniqueId);
+                    table.ForeignKey(
+                        name: "FK_IncomeSource_AppUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AppUsers",
+                        principalColumn: "UniqueId");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "WishLists",
                 columns: table => new
                 {
                     UniqueId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Item = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    URl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Purpose = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    Amount = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: true),
+                    LastUpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -110,8 +133,7 @@ namespace BudgetPlannerApi.Migrations
                         name: "FK_WishLists_AppUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AppUsers",
-                        principalColumn: "UniqueId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "UniqueId");
                 });
 
             migrationBuilder.CreateTable(
@@ -141,8 +163,9 @@ namespace BudgetPlannerApi.Migrations
                     UniqueId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ExpectedAmount = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: true),
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    LastUpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -167,8 +190,14 @@ namespace BudgetPlannerApi.Migrations
                 {
                     UniqueId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: true),
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    ExpenseDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastUpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -239,6 +268,17 @@ namespace BudgetPlannerApi.Migrations
                         column: x => x.StateId,
                         principalTable: "States",
                         principalColumn: "UniqueId");
+                });
+
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "UniqueId", "AllocatedAmount", "CreatedDate", "Description", "LastUpdatedDate", "Name", "ParentId", "UserId" },
+                values: new object[,]
+                {
+                    { 1, 0, null, "", null, "Transport", null, null },
+                    { 2, 0, null, "", null, "Grocery", null, null },
+                    { 3, 0, null, "", null, "Electronics", null, null },
+                    { 4, 0, null, "", null, "Miscellaneous", null, null }
                 });
 
             migrationBuilder.InsertData(
@@ -1569,6 +1609,11 @@ namespace BudgetPlannerApi.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_IncomeSource_UserId",
+                table: "IncomeSource",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_States_CountryId",
                 table: "States",
                 column: "CountryId");
@@ -1590,6 +1635,9 @@ namespace BudgetPlannerApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "Expenses");
+
+            migrationBuilder.DropTable(
+                name: "IncomeSource");
 
             migrationBuilder.DropTable(
                 name: "Roles");

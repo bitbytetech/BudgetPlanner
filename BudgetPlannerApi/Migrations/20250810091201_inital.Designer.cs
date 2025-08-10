@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BudgetPlannerApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250703053737_updatedLoginResponce")]
-    partial class updatedLoginResponce
+    [Migration("20250810091201_inital")]
+    partial class inital
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -7635,6 +7635,37 @@ namespace BudgetPlannerApi.Migrations
                         });
                 });
 
+            modelBuilder.Entity("BudgetPlannerApi.DB.Models.IncomeSource", b =>
+                {
+                    b.Property<int>("UniqueId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UniqueId"));
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal?>("IncomeAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("LastUpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SourceName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UniqueId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("IncomeSource");
+                });
+
             modelBuilder.Entity("BudgetPlannerApi.DB.Models.User.AppUser", b =>
                 {
                     b.Property<int>("UniqueId")
@@ -7732,7 +7763,10 @@ namespace BudgetPlannerApi.Migrations
                     b.Property<int>("ExpectedAmount")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
+                    b.Property<DateTime?>("LastUpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("UniqueId");
@@ -7751,6 +7785,9 @@ namespace BudgetPlannerApi.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UniqueId"));
+
+                    b.Property<int>("AllocatedAmount")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -7783,24 +7820,28 @@ namespace BudgetPlannerApi.Migrations
                         new
                         {
                             UniqueId = 1,
+                            AllocatedAmount = 0,
                             Description = "",
                             Name = "Transport"
                         },
                         new
                         {
                             UniqueId = 2,
+                            AllocatedAmount = 0,
                             Description = "",
                             Name = "Grocery"
                         },
                         new
                         {
                             UniqueId = 3,
+                            AllocatedAmount = 0,
                             Description = "",
                             Name = "Electronics"
                         },
                         new
                         {
                             UniqueId = 4,
+                            AllocatedAmount = 0,
                             Description = "",
                             Name = "Miscellaneous"
                         });
@@ -7814,10 +7855,28 @@ namespace BudgetPlannerApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UniqueId"));
 
+                    b.Property<decimal?>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ExpenseDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("LastUpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("UniqueId");
@@ -7837,19 +7896,21 @@ namespace BudgetPlannerApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UniqueId"));
 
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Item")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Purpose")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime?>("LastUpdatedDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("URl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("UniqueId");
@@ -7902,6 +7963,15 @@ namespace BudgetPlannerApi.Migrations
                     b.Navigation("Country");
                 });
 
+            modelBuilder.Entity("BudgetPlannerApi.DB.Models.IncomeSource", b =>
+                {
+                    b.HasOne("BudgetPlannerApi.DB.Models.User.AppUser", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("AppUser");
+                });
+
             modelBuilder.Entity("BudgetPlannerApplication_2025.Models.BudgetPlan", b =>
                 {
                     b.HasOne("BudgetPlannerApplication_2025.Models.Category", "Category")
@@ -7913,8 +7983,7 @@ namespace BudgetPlannerApi.Migrations
                     b.HasOne("BudgetPlannerApi.DB.Models.User.AppUser", "AppUser")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("AppUser");
 
@@ -7948,8 +8017,7 @@ namespace BudgetPlannerApi.Migrations
                     b.HasOne("BudgetPlannerApi.DB.Models.User.AppUser", "AppUser")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("AppUser");
 
@@ -7960,9 +8028,7 @@ namespace BudgetPlannerApi.Migrations
                 {
                     b.HasOne("BudgetPlannerApi.DB.Models.User.AppUser", "AppUser")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("AppUser");
                 });

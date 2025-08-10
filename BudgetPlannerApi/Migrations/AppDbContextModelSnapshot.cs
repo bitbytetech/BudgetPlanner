@@ -7632,6 +7632,37 @@ namespace BudgetPlannerApi.Migrations
                         });
                 });
 
+            modelBuilder.Entity("BudgetPlannerApi.DB.Models.IncomeSource", b =>
+                {
+                    b.Property<int>("UniqueId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UniqueId"));
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal?>("IncomeAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("LastUpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SourceName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UniqueId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("IncomeSource");
+                });
+
             modelBuilder.Entity("BudgetPlannerApi.DB.Models.User.AppUser", b =>
                 {
                     b.Property<int>("UniqueId")
@@ -7927,6 +7958,15 @@ namespace BudgetPlannerApi.Migrations
                         .IsRequired();
 
                     b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("BudgetPlannerApi.DB.Models.IncomeSource", b =>
+                {
+                    b.HasOne("BudgetPlannerApi.DB.Models.User.AppUser", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("BudgetPlannerApplication_2025.Models.BudgetPlan", b =>

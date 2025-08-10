@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
- using Bpst.API.DB; 
+using Bpst.API.DB;
 using Bpst.API.Services.UserAccount;
 using Bpst.API.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
- 
+using BudgetPlannerApi.DB.Models;
+
 namespace Bpst.API.Controllers.Account
 {
     [Route("api/[controller]")]
@@ -16,9 +17,18 @@ namespace Bpst.API.Controllers.Account
 
         [AllowAnonymous]
         [HttpPost("UserRegistration")]
-        public async Task<ActionResult<UserRegistrationResponse>> PostUser(UserRegistrationVM user)
+        public async Task<ActionResult<UserRegistrationResponse>> CreateUser(UserRegistrationVM user)
         {
             var result = await _userService.RegisterNewUserAsync(user);
+
+            if (result.IsCreated == true && result.UniqueId>0)
+            {
+                _context.IncomeSource.Add(new IncomeSource() { UserId = result.UniqueId, SourceName = "Salary", IncomeAmount = 0, CreatedDate = DateTime.UtcNow, LastUpdatedDate = DateTime.UtcNow });
+                _context.IncomeSource.Add(new IncomeSource() { UserId = result.UniqueId, SourceName = "Freelance", IncomeAmount = 0, CreatedDate = DateTime.UtcNow, LastUpdatedDate = DateTime.UtcNow });
+                _context.IncomeSource.Add(new IncomeSource() { UserId = result.UniqueId, SourceName = "Investments", IncomeAmount = 0, CreatedDate = DateTime.UtcNow, LastUpdatedDate = DateTime.UtcNow });
+                _context.IncomeSource.Add(new IncomeSource() { UserId = result.UniqueId, SourceName = "Gifts", IncomeAmount = 0, CreatedDate = DateTime.UtcNow, LastUpdatedDate = DateTime.UtcNow });
+                _context.SaveChangesAsync().Wait();
+            }
             return result;
         }
 
@@ -47,7 +57,7 @@ namespace Bpst.API.Controllers.Account
         {
             string? email = User.FindFirst(ClaimTypes.Email)?.Value;
             //ToDo, Validate user from existing token and update his password
-            var result = await _userService.UpdatePassword(email,oldPassword, newPassword, confirmPassword);
+            var result = await _userService.UpdatePassword(email, oldPassword, newPassword, confirmPassword);
             return result;
         }
     }
