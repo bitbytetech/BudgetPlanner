@@ -3,9 +3,7 @@
 /BudgetPlannerApi/bin/
 /BudgetPlannerApi/obj/
 /AngularUI/v1/node_modules/
-/AngularUI/MyBudgetPlannerUi/.angular/
-/AngularUI/MyBudgetPlannerUi/node_modules/
-/AngularUI/MyBudgetPlannerUi/.vscode/
 /AngularUI/v3/.angular/
 /AngularUI/v3/node_modules/
+/AngularUI/v2/.angular/
 /AngularUI/v2/node_modules/
