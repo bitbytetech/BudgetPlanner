@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Bpst.API.DB;
+using Bpst.API.Services.UserAccount;
+using BudgetPlannerApi.DB.Models;
+using BudgetPlannerApplication_2025.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Bpst.API.DB;
-using BudgetPlannerApi.DB.Models;
-using BudgetPlannerApplication_2025.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BudgetPlannerApi.Controllers
 {
@@ -16,23 +17,18 @@ namespace BudgetPlannerApi.Controllers
     public class IncomeSourceController : ControllerBase
     {
         private readonly AppDbContext _context;
+        public readonly IUserAccountService _userAccountService;
 
-        public IncomeSourceController(AppDbContext context)
+        public IncomeSourceController(AppDbContext context, IUserAccountService userAccountService)
         {
             _context = context;
-        }
-        private int? GetLoggedInUserId()
-        {
-            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
-            if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
-                return userId;
-            return null;
-        }
+            _userAccountService = userAccountService;
+        } 
         // GET: api/IncomeSource
         [HttpGet]
         public async Task<ActionResult<IEnumerable<IncomeSource>>> GetIncomeSource()
         {
-            return await _context.IncomeSource.ToListAsync();
+            return await _context.IncomeSource.Where(i=>i.UserId.Equals(_userAccountService.GetLoggedInUserId())).ToListAsync();
         }
 
         // GET: api/IncomeSource/5
@@ -49,8 +45,8 @@ namespace BudgetPlannerApi.Controllers
             return incomeSource;
         }
 
-        
-       
+
+
 
 
         [HttpPost("CreateOrEdit")]
@@ -60,11 +56,10 @@ namespace BudgetPlannerApi.Controllers
                 return BadRequest("Invalid IncomeSource data.");
             else if (IncomeSource.UserId == 0)
                 IncomeSource.UserId = null;
-
-            var userId = GetLoggedInUserId();
-            if (userId == null)
+             
+            if (_userAccountService.GetLoggedInUserId() == null)
                 return Unauthorized("User ID not found in token.");
-            IncomeSource.UserId = userId;
+            IncomeSource.UserId = _userAccountService.GetLoggedInUserId();
 
             var existingIncome = await _context.Categories
                 .AsNoTracking()
@@ -78,7 +73,7 @@ namespace BudgetPlannerApi.Controllers
 
                 return CreatedAtAction(nameof(GetIncomeSource), new { id = IncomeSource.UniqueId }, IncomeSource);
             }
-            else if (userId == existingIncome.UserId)
+            else if (_userAccountService.GetLoggedInUserId() == existingIncome.UserId)
             {
                 IncomeSource.LastUpdatedDate = DateTime.UtcNow;
                 _context.Entry(IncomeSource).State = EntityState.Modified;

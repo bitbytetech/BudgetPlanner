@@ -63,6 +63,9 @@ builder.Services.AddAuthentication(options =>
 // Database connection
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("LiveDB")));
+// Register services
+
+builder.Services.AddHttpContextAccessor();  // ✅ this line is missing
 
 // Services registration
 builder.Services.AddScoped<IUserAccountService, UserAccountService>();

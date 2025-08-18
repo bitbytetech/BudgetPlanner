@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
- using BudgetPlannerApplication_2025.Models;
+using BudgetPlannerApplication_2025.Models;
 using Bpst.API.DB;
+using Bpst.API.Services.UserAccount;
 
 namespace BudgetPlannerApplication_2025.Controllers
 {
@@ -15,10 +11,12 @@ namespace BudgetPlannerApplication_2025.Controllers
     public class ExpensesController : ControllerBase
     {
         private readonly AppDbContext _context;
+        public readonly IUserAccountService _userAccountService;
 
-        public ExpensesController(AppDbContext context)
+        public ExpensesController(AppDbContext context, IUserAccountService userAccountService)
         {
             _context = context;
+            _userAccountService = userAccountService;
         }
         private int? GetLoggedInUserId()
         {

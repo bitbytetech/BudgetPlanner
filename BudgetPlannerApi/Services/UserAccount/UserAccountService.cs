@@ -9,11 +9,12 @@ using System.Text;
 
 namespace Bpst.API.Services.UserAccount
 {
-    public class UserAccountService(AppDbContext context, IConfiguration config) : IUserAccountService
-    {
+    public class UserAccountService(AppDbContext context, IConfiguration config, IHttpContextAccessor httpContextAccessor) : IUserAccountService
+    { 
         private readonly AppDbContext _context = context;
         private readonly IConfiguration _config = config;
-        private object _httpContextAccessor;
+         private readonly IHttpContextAccessor _httpContextAccessor= httpContextAccessor;
+
 
         public async Task<bool> IfUserExists(string email)
         {
@@ -93,6 +94,15 @@ namespace Bpst.API.Services.UserAccount
             }
             else response.ErrorMessages = ["User not Registerd in the Portal"];
             return response;
+        }
+
+        public int? GetLoggedInUserId()
+        {
+            var User = _httpContextAccessor.HttpContext?.User;
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+            if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
+                return userId;
+            return null;
         }
 
         private string CreateJwtToken(AppUser _appUser)
