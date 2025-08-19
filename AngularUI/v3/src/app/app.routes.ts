@@ -10,7 +10,7 @@ import { Logout } from './pages/logout/logout';
 
 
 export const routes: Routes = [
-  { path: '', component:Home ,pathMatch: 'full'},  // Default route
+  { path: '', component: Login, pathMatch: 'full' },  // Default route
   { path: 'home', component: Home },
   { path: 'register', component: Register  },
   { path: 'login', component: Login },
