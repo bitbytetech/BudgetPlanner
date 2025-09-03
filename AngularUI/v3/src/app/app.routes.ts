@@ -21,5 +21,5 @@ export const routes: Routes = [
   { path: 'income', component: MonthlyIncome },
         
 
-  { path: '**', redirectTo: 'home' }  // Wildcard route for 404
+  { path: '**', redirectTo: 'login' }  // Wildcard route for 404
 ];
