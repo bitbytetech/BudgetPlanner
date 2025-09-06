@@ -1,12 +1,11 @@
-<div class="container my-5">
+<div class="container my-4">
+
   <div class="card shadow-sm border-0">
     <div class="card-body p-4">
-      <h1>Monthly Income</h1>
+            <h2 class="mb-4 border-bottom pb-2">Monthly Income</h2>
 
-      <!-- ✅ Success Message -->
-      <div *ngIf="message" class="alert alert-success" role="alert">
-        {{ message }}
-      </div>
+
+  
 
       <!-- ✅ Form to Add Income -->
       <form (ngSubmit)="addIncome()" #incomeForm="ngForm">
@@ -34,7 +33,10 @@
           </button>
         </div>
       </form>
-
+    <!-- ✅ Success Message -->
+      <div *ngIf="message" class="alert alert-success" role="alert">
+        {{ message }}
+      </div>
       <!-- ✅ Income List Table -->
       <div class="mt-4" *ngIf="incomes.length > 0">
         <h2>Income List</h2>

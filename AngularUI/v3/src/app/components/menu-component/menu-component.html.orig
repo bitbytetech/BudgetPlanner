@@ -38,8 +38,13 @@
                          <li class="nav-item">
                         <a class="nav-link active" routerLink="/expenses" routerLinkActive="active-link">Expenses</a>
                     </li>
+<<<<<<< HEAD
                   
+=======
+                     <li class="nav-item">
                         <a class="nav-link active" routerLink="/income" routerLinkActive="active-link">monthly-income</a>
+                    </li>
+>>>>>>> b827ffe (fixing design of all pages)
                        <li class="nav-item">
                         <a class="nav-link active" routerLink="/monthly-expenses" routerLinkActive="monthly-expenses">Transactions</a>
                     </li>
