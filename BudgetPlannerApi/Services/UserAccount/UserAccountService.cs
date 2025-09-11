@@ -34,6 +34,9 @@ namespace Bpst.API.Services.UserAccount
             }
             return null;
         }
+
+
+
         public async Task<UserRegistrationResponse> RegisterNewUserAsync(UserRegistrationVM user)
         {
             var response = new UserRegistrationResponse() { };
@@ -78,23 +81,15 @@ namespace Bpst.API.Services.UserAccount
         }
         public async Task<LoginResponse> Login(LoginVM login)
         {
-            var response = new LoginResponse();
-            var _appUser = await GetUserByEmail(login.LoginName);
-            if (_appUser != null)
-            {
-                response = ValidateCredentials(_appUser, login.Password);
-                if (response.IsLoginSuccess)
-                    await PopulateLoginResponse(response, login.LoginName);
-                else
-                {
-                    response.IsLoginSuccess = false;
-                    response.ErrorMessages ??= [];
-                    response.ErrorMessages.Add("Invalid Credentials");
-                    return response;
-                }
-            }
-            else response.ErrorMessages = ["User not Registerd in the Portal"];
-            return response;
+            var user = await GetUserByEmail(login.LoginName);
+            if (user == null)
+                return new LoginResponse { IsLoginSuccess = false, ErrorMessages = new List<string> { "User not registered" } };
+
+            bool valid = BCrypt.Net.BCrypt.Verify(login.Password, user.PasswordHash);
+            if (!valid)
+                return new LoginResponse { IsLoginSuccess = false, ErrorMessages = new List<string> { "Invalid credentials" } };
+
+            return await PopulateLoginResponse(user);
         }
 
         public int? GetLoggedInUserId()
@@ -130,19 +125,45 @@ namespace Bpst.API.Services.UserAccount
                 : BCrypt.Net.BCrypt.Verify(password, _appUser.PasswordHash);
             return response;
         }
-        private async Task PopulateLoginResponse(LoginResponse response, string loginName)
+        private async Task<LoginResponse> PopulateLoginResponse(AppUser user, bool isRefresh = false)
         {
-            var _appUser = await GetUserByEmail(loginName);
-            response.IsLoginSuccess = true;
-            response.FName = _appUser.FirstName;
-            response.LName = _appUser.LastName;
-            response.Email = _appUser.LoginEmail;
-            response.Mobile = _appUser.PhoneNumber;
-            response.UserId = _appUser.UniqueId.ToString();
-            response.Token = CreateJwtToken(_appUser);
-            response.RefreshToken = GenerateRefreshToken();
-            response.IssuedAt = DateTime.UtcNow;
-            response.userRoles = await GetUserRole(_appUser.LoginEmail);
+            string refreshToken = isRefresh ? user.RefreshToken! : GenerateRefreshToken();
+            if (!isRefresh)
+            {
+                user.RefreshToken = refreshToken;
+                user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+                _context.AppUsers.Update(user);
+                await _context.SaveChangesAsync();
+            }
+
+            return new LoginResponse
+            {
+                IsLoginSuccess = true,
+                Token = CreateJwtToken(user),
+                RefreshToken = refreshToken,
+                UserId = user.UniqueId.ToString(),
+                FName = user.FirstName,
+                LName = user.LastName,
+                Email = user.LoginEmail,
+                Mobile = user.PhoneNumber,
+                IssuedAt = DateTime.UtcNow,
+                userRoles = await GetUserRole(user.LoginEmail)
+            };
+        }
+
+      
+        public async Task<LoginResponse?> RefreshToken(string refreshToken)
+        {
+            var user = await _context.AppUsers.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
+            if (user == null || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
+                return null;
+
+            user.RefreshToken = GenerateRefreshToken();
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+            _context.AppUsers.Update(user);
+            await _context.SaveChangesAsync();
+
+            return await PopulateLoginResponse(user, true);
         }
 
         private string GenerateRefreshToken()
@@ -152,6 +173,8 @@ namespace Bpst.API.Services.UserAccount
             rng.GetBytes(randomNumber);
             return Convert.ToBase64String(randomNumber);
         }
+
+
 
         private async Task<List<Roles>?> GetUserRole(string loginEmail)
         {

@@ -60,5 +60,18 @@ namespace Bpst.API.Controllers.Account
             var result = await _userService.UpdatePassword(email, oldPassword, newPassword, confirmPassword);
             return result;
         }
+
+        [AllowAnonymous]
+        [HttpPost("RefreshToken")]
+        public async Task<ActionResult<LoginResponse>> RefreshToken([FromBody] string refreshToken)
+        {
+            var result = await _userService.RefreshToken(refreshToken);
+            if (result == null)
+                return Unauthorized(new { message = "Invalid or expired refresh token" });
+
+            return Ok(result);
+        }
+
+
     }
 }
