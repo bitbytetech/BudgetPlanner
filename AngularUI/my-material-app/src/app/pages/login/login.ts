@@ -8,14 +8,18 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 
-@Component({
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+ @Component({
   selector: 'app-login',
   imports: [
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    CommonModule
+    CommonModule,
+    MatCardModule,
+    MatIconModule
   ],
   templateUrl: './login.html',
   styleUrl: './login.css'
@@ -23,10 +27,11 @@ import { Router } from '@angular/router';
 export class Login {
   loginForm: FormGroup;
   errorMessage: string = '';
-
+  hide = true;
+  
   constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
     this.loginForm = this.fb.group({
-      loginName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
   }
