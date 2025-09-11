@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Bpst.API.Services.UserAccount
@@ -139,9 +140,19 @@ namespace Bpst.API.Services.UserAccount
             response.Mobile = _appUser.PhoneNumber;
             response.UserId = _appUser.UniqueId.ToString();
             response.Token = CreateJwtToken(_appUser);
+            response.RefreshToken = GenerateRefreshToken();
             response.IssuedAt = DateTime.UtcNow;
             response.userRoles = await GetUserRole(_appUser.LoginEmail);
         }
+
+        private string GenerateRefreshToken()
+        {
+            var randomNumber = new byte[64];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomNumber);
+            return Convert.ToBase64String(randomNumber);
+        }
+
         private async Task<List<Roles>?> GetUserRole(string loginEmail)
         {
             var roles = await (from user in _context.AppUsers

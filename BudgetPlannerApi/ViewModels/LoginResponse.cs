@@ -8,6 +8,8 @@ namespace Bpst.API.ViewModels
  
         public bool IsLoginSuccess { get; set; }
         public string Token { get; set; } = string.Empty;
+        // new property for refresh token
+        public string RefreshToken { get; set; } = string.Empty;
         public string UserId { get; set; } = string.Empty;
         public List<string>? ErrorMessages { get; set; }
         public string FName { get; set; } = string.Empty;

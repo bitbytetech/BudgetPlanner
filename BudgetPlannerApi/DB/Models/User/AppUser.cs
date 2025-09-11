@@ -36,5 +36,14 @@ namespace BudgetPlannerApi.DB.Models.User
         public string LoginEmail { get; set; } = string.Empty;
         public string PasswordHash { get; set; } = string.Empty;
         public List<string>? Roles { get; set; } = [];
+
+
+
+        public string? RefreshToken { get; set; }
+        public DateTime? RefreshTokenExpiryTime { get; set; }
+
+
     }
+
+
 }
