@@ -1,11 +1,11 @@
-<div class="container my-5">
+<div class="container">
   <div class="card shadow-sm border-0">
     <div class="card-body p-4">
       <h2 class="mb-4 border-bottom pb-2">Wishlist Management</h2>
 
       <form [formGroup]="form" (ngSubmit)="submit()">
-        
-        <input type="hidden" formControlName="uniqueId" hidden/>
+
+        <input type="hidden" formControlName="uniqueId" hidden />
 
         <div class="row g-4">
           <div class="col-sm-12 col-md-6 col-lg-4">
@@ -28,15 +28,15 @@
           <button type="submit" class="btn btn-primary px-4 me-2" [disabled]="form.invalid">Save</button>
           <button type="button" class="btn btn-secondary px-4" (click)="form.reset()">Clear</button>
         </div>
-        
- <div *ngIf="notification()" class="mb-3">
-              <div [ngClass]="isSuccess() ? 'alert alert-success' : 'alert alert-danger'">
-                {{ notification() }}
-              </div>
-            </div>
-              <div *ngIf="form.get('item')?.valid" class="text-success small">
-                    <span>save wishlist successfully</span>
-                  </div>
+
+        <div *ngIf="notification()" class="mb-3">
+          <div [ngClass]="isSuccess() ? 'alert alert-success' : 'alert alert-danger'">
+            {{ notification() }}
+          </div>
+        </div>
+        <div *ngIf="form.get('item')?.valid" class="text-success small">
+          <span>save wishlist successfully</span>
+        </div>
 
       </form>
     </div>

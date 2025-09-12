@@ -1,23 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterLink, RouterOutlet ,RouterLinkActive} from '@angular/router';
+import { Router, RouterLink, RouterOutlet, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MenuComponent } from "./components/menu-component/menu-component";
 import { AuthService } from './services/auth.service';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet,  MenuComponent],
+  imports: [CommonModule, RouterOutlet, MenuComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
- 
-export class App   {
-   constructor( public auth: AuthService,   private router: Router) {}
- 
+
+export class App {
+  constructor(public auth: AuthService, private router: Router) { }
+
   protected title = 'MyBudgetPlannerUi';
 
   get userTokenData() {
-     return this.auth.userTokenData();
+    return this.auth.userTokenData();
   }
 
   get isLoggedIn() {
@@ -27,5 +27,9 @@ export class App   {
   logout() {
     this.auth.logout();
     this.router.navigate(['/login']);
+  }
+
+  get currentYear(): number {
+    return new Date().getFullYear();
   }
 }

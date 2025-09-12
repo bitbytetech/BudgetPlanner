@@ -6,13 +6,13 @@ import { CommonModule } from '@angular/common';
 import { RouterLink, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
- 
+
 @Component({
-   selector: 'app-login',
-   templateUrl: './login.html',
-   styleUrl: './login.scss',
-   imports: [CommonModule, ReactiveFormsModule, RouterModule],
-   standalone: true,
+  selector: 'app-login',
+  templateUrl: './login.html',
+  styleUrl: './login.scss',
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  standalone: true,
 })
 export class Login {
   loginForm: FormGroup;
@@ -23,7 +23,7 @@ export class Login {
   constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
     this.loginForm = this.fb.group({
       loginName: ['Ankit.sahay1@example.com', [Validators.required, Validators.email]],
-      password: ['Ankit.sahay1@example.com',[Validators.required,Validators.minLength(6),]]
+      password: ['Ankit.sahay1@example.com', [Validators.required, Validators.minLength(6),]]
     });
   }
 
@@ -38,7 +38,7 @@ export class Login {
             this.auth.setUser(response); // update AuthService, triggers App update
             this.notification.set('Login successful!');
             this.isSuccess.set(true);
-            setTimeout(() => this.router.navigate(['/categories-crud']), 1000);
+            setTimeout(() => this.router.navigate(['/categories']), 1000);
           } else {
             this.notification.set('Login failed. Please check your credentials.');
             this.isSuccess.set(false);
