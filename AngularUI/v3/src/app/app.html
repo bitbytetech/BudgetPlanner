@@ -1,7 +1,5 @@
- 
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm mb-4">
 
- <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm mb-4">
- 
   <div class="container-fluid">
     <a class="navbar-brand fw-bold" routerLink="/">MyBudgetPlanner</a>
 
@@ -14,12 +12,15 @@
 
 
 
-    
 
 
 
-       <app-menu-component *ngIf="isLoggedIn"></app-menu-component>
-    
+      @if(isLoggedIn)
+      {
+      <app-menu-component></app-menu-component>
+
+      }
+
       <!-- Right-aligned links -->
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <li class="nav-item" *ngIf="!isLoggedIn">
@@ -36,12 +37,12 @@
           <a class="nav-link" style="cursor: pointer;" (click)="logout()">Logout</a>
         </li>
       </ul>
- <app-menu-component *ngIf="isLoggedIn"></app-menu-component>
+      <app-menu-component *ngIf="isLoggedIn"></app-menu-component>
     </div>
   </div>
 </nav>
-  
- 
+
+
 <div class="page" id="budgets-page">
   <router-outlet></router-outlet>
 </div>
