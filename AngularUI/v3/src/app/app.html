@@ -27,13 +27,10 @@
   <!-- Body with Left Menu + Main Content -->
   <div class="body flex-grow-1 d-flex">
 
-    <!-- Left Menu: 10% width -->
-    <!-- <aside class="left-menu p-3 border-end bg-light" *ngIf="isLoggedIn">
-      <app-menu-component></app-menu-component>
-    </aside> -->
+
+    @if(isLoggedIn) {
     <div class="content-wrapper">
       <app-menu-component></app-menu-component>
-
     </div>
     } <!-- Main Content: 90% width -->
     <main class="main-content p-4 flex-fill">

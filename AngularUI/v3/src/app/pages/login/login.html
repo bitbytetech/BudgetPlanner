@@ -48,15 +48,17 @@
           </div>
           <div class="d-grid mt-4">
             <button type="submit" class="btn btn-primary btn-sm" [disabled]="loginForm.invalid || isLoading()">
-             @if(isLoading())
-             { 
+              @if(isLoading())
+              {
               <span class="spinner-border spinner-border-sm me-2"></span>
-             }
-               Login
+              }
+              Login
             </button>
           </div>
         </form>
-        <div class="text-center mt-3"><a routerLink="/register" class="small">Don't have an account? Register</a></div>
+        <div class="text-center mt-3">
+          <a routerLink="/register" class="small">Don't have an account? Register</a>
+        </div>
 
       </div>
     </div>
