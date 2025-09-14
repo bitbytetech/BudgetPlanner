@@ -23,12 +23,13 @@ namespace BudgetPlannerApi.Controllers
         {
             _context = context;
             _userAccountService = userAccountService;
-        } 
+        }
         // GET: api/IncomeSource
         [HttpGet]
         public async Task<ActionResult<IEnumerable<IncomeSource>>> GetIncomeSource()
         {
-            return await _context.IncomeSource.Where(i=>i.UserId.Equals(_userAccountService.GetLoggedInUserId())).ToListAsync();
+            var loggedInUserId = _userAccountService.GetLoggedInUserId();
+            return await _context.IncomeSource.Where(i => i.UserId.Equals(loggedInUserId)).ToListAsync();
         }
 
         // GET: api/IncomeSource/5
@@ -56,7 +57,7 @@ namespace BudgetPlannerApi.Controllers
                 return BadRequest("Invalid IncomeSource data.");
             else if (IncomeSource.UserId == 0)
                 IncomeSource.UserId = null;
-             
+
             if (_userAccountService.GetLoggedInUserId() == null)
                 return Unauthorized("User ID not found in token.");
             IncomeSource.UserId = _userAccountService.GetLoggedInUserId();
