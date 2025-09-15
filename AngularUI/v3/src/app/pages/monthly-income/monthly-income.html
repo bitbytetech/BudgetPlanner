@@ -26,12 +26,17 @@
           </button>
         </div>
       </form>
-      <!-- ✅ Success Message -->
-      <div *ngIf="message" class="alert alert-success" role="alert">
-        {{ message }}
+
+
+      @if(loadingIncomes())
+      {
+      <div class="text-center my-4">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
       </div>
-      <!-- ✅ Income List Table -->
-      <div class="mt-4" *ngIf="incomes.length > 0">
+      }@else {
+      <div class="mt-4">
         <h2>Income List</h2>
         <table class="table table-striped">
           <thead>
@@ -43,17 +48,21 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let income of incomes; index as i">
+            @for (income of incomes(); track income.uniqueId; let i = $index) {
+            <tr>
               <td>{{ i + 1 }}</td>
-              <td>{{ income.source }}</td>
-              <td>{{ income.amount }} Rs</td>
+              <td>{{ income.sourceName }}</td>
+              <td>{{ income.incomeAmount }} Rs</td>
               <td>
-                <button class="btn btn-danger btn-sm" (click)="deleteIncome(income.id)">Delete</button>
+                <button class="btn btn-danger btn-sm" (click)="deleteIncome(income.uniqueId)">
+                  Delete
+                </button>
               </td>
             </tr>
+            }
           </tbody>
         </table>
       </div>
+      }
     </div>
   </div>
-</div>
