@@ -29,7 +29,10 @@ namespace BudgetPlannerApi.Controllers
         public async Task<ActionResult<IEnumerable<IncomeSource>>> GetIncomeSource()
         {
             var loggedInUserId = _userAccountService.GetLoggedInUserId();
-            return await _context.IncomeSource.Where(i => i.UserId.Equals(loggedInUserId)).ToListAsync();
+
+            if(loggedInUserId == null) 
+                return await _context.IncomeSource.ToListAsync();
+             return await _context.IncomeSource.Where(i => i.UserId.Equals(loggedInUserId)).ToListAsync();
         }
 
         // GET: api/IncomeSource/5
