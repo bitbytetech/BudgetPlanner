@@ -1,41 +1,11 @@
 <div class="container">
-
   <div class="card shadow-sm border-0">
     <div class="card-body p-4">
       <h2 class="mb-4 border-bottom pb-2">Monthly Income</h2>
 
+      <app-add-monthly-income-component></app-add-monthly-income-component>
 
 
-
-      <!-- ✅ Form to Add Income -->
-      <form (ngSubmit)="addIncome()" #incomeForm="ngForm">
-        <div class="row g-4">
-          <div class="col-sm-12 col-md-6 col-lg-4">
-            <label for="source" class="form-label"> Source On Income</label>
-            <input type="text" class="form-control" id="source" [(ngModel)]="source" name="source" required />
-          </div>
-          <div class="col-sm-12 col-md-6 col-lg-4">
-            <label for="amount" class="form-label">Amount</label>
-            <input type="number" class="form-control" id="amount" [(ngModel)]="amount" name="amount" required min="1" />
-          </div>
-        </div>
-
-        <div class="mt-4 d-flex justify-content-end">
-          <button type="submit" class="btn btn-primary" [disabled]="incomeForm.invalid">
-            Add Income
-          </button>
-        </div>
-      </form>
-
-
-      @if(loadingIncomes())
-      {
-      <div class="text-center my-4">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-      </div>
-      }@else {
       <div class="mt-4">
         <h2>Income List</h2>
         <table class="table table-striped">
@@ -48,7 +18,7 @@
             </tr>
           </thead>
           <tbody>
-            @for (income of incomes(); track income.uniqueId; let i = $index) {
+            @for (income of incomeSources(); track income.uniqueId; let i = $index) {
             <tr>
               <td>{{ i + 1 }}</td>
               <td>{{ income.sourceName }}</td>
@@ -63,6 +33,5 @@
           </tbody>
         </table>
       </div>
-      }
     </div>
   </div>

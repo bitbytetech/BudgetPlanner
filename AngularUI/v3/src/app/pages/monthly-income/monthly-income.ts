@@ -4,15 +4,16 @@ import { FormsModule } from '@angular/forms';
 import { MonthlyIncomeService } from '../../services/monthly-income-service';
 import { IncomeSourceModel } from '../../models/IncomeSourceModel';
 import { AuthService } from '../../services/auth.service';
+import { AddMonthlyIncomeComponent } from "../../components/MonthlyIncome/add-monthly-income-component/add-monthly-income-component";
 @Component({
   selector: 'app-monthly-income',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AddMonthlyIncomeComponent],
   templateUrl: './monthly-income.html',
   styleUrls: ['./monthly-income.scss']
 })
 export class MonthlyIncome {
-  incomes = signal<IncomeSourceModel[]>([]);
+  incomeSources = signal<IncomeSourceModel[]>([]);
   source: string = '';
   amount: number | null = null;
   message: string = '';
@@ -30,8 +31,8 @@ export class MonthlyIncome {
       next: (data) => {
         var loggedinUser = this.authService.userTokenData();
         var filteredIncomes = data.filter(income => income.userId == loggedinUser?.userId);
-        this.incomes.set(filteredIncomes);
-        console.log(this.incomes());
+        this.incomeSources.set(filteredIncomes);
+        console.log(this.incomeSources());
         this.message = 'Income sources loaded successfully';
 
       },
