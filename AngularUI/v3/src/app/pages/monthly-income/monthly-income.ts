@@ -4,11 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { MonthlyIncomeService } from '../../services/monthly-income-service';
 import { IncomeSourceModel } from '../../models/IncomeSourceModel';
 import { AuthService } from '../../services/auth.service';
-import { AddMonthlyIncomeComponent } from "../../components/MonthlyIncome/add-monthly-income-component/add-monthly-income-component";
+import { AddIncomeComponent } from "./components/add-income-component/add-income-component";
 @Component({
   selector: 'app-monthly-income',
   standalone: true,
-  imports: [CommonModule, FormsModule, AddMonthlyIncomeComponent],
+  imports: [CommonModule, FormsModule, AddIncomeComponent],
   templateUrl: './monthly-income.html',
   styleUrls: ['./monthly-income.scss']
 })
