@@ -11,10 +11,16 @@ import { AuthService } from '../../../../services/auth.service';
   styleUrl: './index-income-component.scss'
 })
 export class IndexIncomeComponent {
-  editIncome(arg0: number) {
-    throw new Error('Method not implemented.');
+  editIncome(id: number) {
+    this.incomeSources().find(income => {
+      if (income.uniqueId === id) {
+        this.editableIncomeSource.set(income);
+        console.log(this.editableIncomeSource());
+      }
+    });
   }
   @Input({ required: true }) incomeSources = signal<IncomeSourceModel[]>([]);
+  @Input({ required: true }) editableIncomeSource = signal<IncomeSourceModel | null>(null);
   source: string = '';
   amount: number | null = null;
   message: string = '';

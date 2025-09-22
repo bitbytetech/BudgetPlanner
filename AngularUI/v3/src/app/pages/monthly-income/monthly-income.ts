@@ -15,6 +15,7 @@ import { IndexIncomeComponent } from "./components/index-income-component/index-
 })
 export class MonthlyIncome {
   incomeSources = signal<IncomeSourceModel[]>([]);
+  editableIncomeSource = signal<IncomeSourceModel | null>(null);
   source: string = '';
   amount: number | null = null;
   message: string = '';

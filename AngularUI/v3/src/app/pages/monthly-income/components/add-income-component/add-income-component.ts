@@ -13,18 +13,18 @@ import { IncomeSourceModel } from '../../../../models/IncomeSourceModel';
 })
 export class AddIncomeComponent {
   savingIncome = signal(false);
-  @Input() editableIncomeSources = signal<IncomeSourceModel | null>(null);
+  @Input() editableIncomeSource = signal<IncomeSourceModel | null>(null);
   @Input({ required: true }) incomeSources = signal<IncomeSourceModel[]>([]);
 
   incomeForm = new FormGroup({
-    sourceName: new FormControl(this.editableIncomeSources()?.sourceName, Validators.required),
-    incomeAmount: new FormControl(this.editableIncomeSources()?.incomeAmount, [Validators.required, Validators.min(1)]),
-    uniqueId: new FormControl(this.editableIncomeSources()?.uniqueId),
-    userId: new FormControl(this.editableIncomeSources()?.userId)
+    sourceName: new FormControl(this.editableIncomeSource()?.sourceName, Validators.required),
+    incomeAmount: new FormControl(this.editableIncomeSource()?.incomeAmount, [Validators.required, Validators.min(1)]),
+    uniqueId: new FormControl(this.editableIncomeSource()?.uniqueId),
+    userId: new FormControl(this.editableIncomeSource()?.userId)
   });
   constructor(private fb: FormBuilder, private monthlyIncomeService: MonthlyIncomeService) {
     effect(() => {
-      const income = this.editableIncomeSources();
+      const income = this.editableIncomeSource();
       if (income) {
         this.incomeForm.patchValue({
           sourceName: income.sourceName,
@@ -43,11 +43,11 @@ export class AddIncomeComponent {
       this.savingIncome.set(true);
       const formValue = this.incomeForm.value;
       const newIncome: IncomeSourceModel = {
-        uniqueId: this.editableIncomeSources()?.uniqueId ?? 0, // 0 means new
-        userId: this.editableIncomeSources()?.userId ?? 1,     // put current userId here
+        uniqueId: this.editableIncomeSource()?.uniqueId ?? 0, // 0 means new
+        userId: this.editableIncomeSource()?.userId ?? 1,     // put current userId here
         sourceName: formValue.sourceName!,
         incomeAmount: formValue.incomeAmount!,
-        createdDate: this.editableIncomeSources()?.createdDate ?? new Date(),
+        createdDate: this.editableIncomeSource()?.createdDate ?? new Date(),
         lastUpdatedDate: new Date(),
       };
 
@@ -55,7 +55,7 @@ export class AddIncomeComponent {
         tap(response => {
           this.incomeSources.set([response, ...this.incomeSources()]);
           this.incomeForm.reset();
-          this.editableIncomeSources.set(null);
+          this.editableIncomeSource.set(null);
           this.savingIncome.set(false);
         })
       ).subscribe({
