@@ -1,3 +1,4 @@
+//savingIncome = signal(false);
 import { MonthlyIncomeService } from '../../../../services/monthly-income-service';
 import { Component, Input, signal, effect } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -11,7 +12,7 @@ import { IncomeSourceModel } from '../../../../models/IncomeSourceModel';
   styleUrl: './add-income-component.scss'
 })
 export class AddIncomeComponent {
-
+  savingIncome = signal(false);
   @Input() editableIncomeSources = signal<IncomeSourceModel | null>(null);
   @Input({ required: true }) incomeSources = signal<IncomeSourceModel[]>([]);
 
@@ -39,6 +40,7 @@ export class AddIncomeComponent {
 
   onSubmit() {
     if (this.incomeForm.valid) {
+      this.savingIncome.set(true);
       const formValue = this.incomeForm.value;
       const newIncome: IncomeSourceModel = {
         uniqueId: this.editableIncomeSources()?.uniqueId ?? 0, // 0 means new
@@ -54,8 +56,13 @@ export class AddIncomeComponent {
           this.incomeSources.set([response, ...this.incomeSources()]);
           this.incomeForm.reset();
           this.editableIncomeSources.set(null);
+          this.savingIncome.set(false);
         })
-      ).subscribe();
+      ).subscribe({
+        error: () => {
+          this.savingIncome.set(false);
+        }
+      });
     } else {
       console.log('Form is invalid');
     }
