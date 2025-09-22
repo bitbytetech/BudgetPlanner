@@ -1,5 +1,5 @@
 import { MonthlyIncomeService } from '../../../../services/monthly-income-service';
-import { Component, signal } from '@angular/core';
+import { Component, Input, signal, effect } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { single, tap } from 'rxjs';
 import { IncomeSourceModel } from '../../../../models/IncomeSourceModel';
@@ -12,23 +12,34 @@ import { IncomeSourceModel } from '../../../../models/IncomeSourceModel';
 })
 export class AddIncomeComponent {
 
-  editableIncomeSources = signal<IncomeSourceModel | null>(null);
+  @Input() editableIncomeSources = signal<IncomeSourceModel | null>(null);
+  @Input({ required: true }) incomeSources = signal<IncomeSourceModel[]>([]);
+
   incomeForm = new FormGroup({
-    sourceName: new FormControl('', Validators.required),
-    incomeAmount: new FormControl(0, [Validators.required, Validators.min(1)])
+    sourceName: new FormControl(this.editableIncomeSources()?.sourceName, Validators.required),
+    incomeAmount: new FormControl(this.editableIncomeSources()?.incomeAmount, [Validators.required, Validators.min(1)]),
+    uniqueId: new FormControl(this.editableIncomeSources()?.uniqueId),
+    userId: new FormControl(this.editableIncomeSources()?.userId)
   });
-
-  constructor(private fb: FormBuilder, private monthlyIncomeService: MonthlyIncomeService) { }
-
-
-
-
+  constructor(private fb: FormBuilder, private monthlyIncomeService: MonthlyIncomeService) {
+    effect(() => {
+      const income = this.editableIncomeSources();
+      if (income) {
+        this.incomeForm.patchValue({
+          sourceName: income.sourceName,
+          incomeAmount: income.incomeAmount,
+          uniqueId: income?.uniqueId,
+          userId: income?.userId
+        });
+      } else {
+        this.incomeForm.reset();
+      }
+    });
+  }
 
   onSubmit() {
     if (this.incomeForm.valid) {
       const formValue = this.incomeForm.value;
-      console.log('Form Submitted!', formValue);
-      // Build IncomeSourceModel cleanly
       const newIncome: IncomeSourceModel = {
         uniqueId: this.editableIncomeSources()?.uniqueId ?? 0, // 0 means new
         userId: this.editableIncomeSources()?.userId ?? 1,     // put current userId here
@@ -40,8 +51,9 @@ export class AddIncomeComponent {
 
       this.monthlyIncomeService.addIncomeSource(newIncome).pipe(
         tap(response => {
-          console.log('Income added:', response);
-          //         this.editIncomeSources.set(newIncome);
+          this.incomeSources.set([response, ...this.incomeSources()]);
+          this.incomeForm.reset();
+          this.editableIncomeSources.set(null);
         })
       ).subscribe();
     } else {
