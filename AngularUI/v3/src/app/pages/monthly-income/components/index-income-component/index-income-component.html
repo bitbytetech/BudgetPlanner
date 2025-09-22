@@ -17,9 +17,12 @@
         <span (click)="deleteIncome(income.uniqueId)" [class.text-muted]="deletingIds.has(income.uniqueId)"
           [style.pointerEvents]="deletingIds.has(income.uniqueId) ? 'none' : 'auto'" class="action-icon"
           style="margin-right:12px;" title="Delete">
-          <span *ngIf="deletingIds.has(income.uniqueId)" class="spinner-border spinner-border-sm" role="status"
-            aria-hidden="true"></span>
-          <i *ngIf="!deletingIds.has(income.uniqueId)" class="bi bi-trash text-danger"></i>
+          @if (deletingIds.has(income.uniqueId)) {
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          }
+          @if (!deletingIds.has(income.uniqueId)) {
+          <i class="bi bi-trash text-danger"></i>
+          }
         </span>
         <span (click)="editIncome(income.uniqueId)" class="action-icon" title="Edit">
           <i class="bi bi-pencil text-success"></i>
