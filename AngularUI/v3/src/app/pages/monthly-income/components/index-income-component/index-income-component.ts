@@ -11,6 +11,9 @@ import { AuthService } from '../../../../services/auth.service';
   styleUrl: './index-income-component.scss'
 })
 export class IndexIncomeComponent {
+  editIncome(arg0: number) {
+    throw new Error('Method not implemented.');
+  }
   @Input({ required: true }) incomeSources = signal<IncomeSourceModel[]>([]);
   source: string = '';
   amount: number | null = null;
