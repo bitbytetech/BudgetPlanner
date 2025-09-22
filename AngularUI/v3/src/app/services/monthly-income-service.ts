@@ -12,5 +12,8 @@ export class MonthlyIncomeService {
   getIncomeSources(): Observable<IncomeSourceModel[]> {
     return this.http.get<IncomeSourceModel[]>(this.apiUrl);
   }
+  DeleteIncomeSource(id: number): Observable<IncomeSourceModel[]> {
+    return this.http.delete<any>(`${this.apiUrl}/${id}`);
+  }
 
 }

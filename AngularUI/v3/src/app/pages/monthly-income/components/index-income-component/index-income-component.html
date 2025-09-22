@@ -1,1 +1,27 @@
-<p>index-income-component works!</p>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Source</th>
+      <th scope="col">Amount</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (income of incomeSources(); track income.uniqueId; let i = $index) {
+    <tr>
+      <td>{{ i + 1 }}</td>
+      <td>{{ income.sourceName }}</td>
+      <td>{{ income.incomeAmount }} Rs</td>
+      <td>
+        <button class="btn btn-danger btn-sm" (click)="deleteIncome(income.uniqueId)"
+          [disabled]="deletingIds.has(income.uniqueId)">
+          <span *ngIf="deletingIds.has(income.uniqueId)" class="spinner-border spinner-border-sm" role="status"
+            aria-hidden="true"></span>
+          <span *ngIf="!deletingIds.has(income.uniqueId)">Delete</span>
+        </button>
+      </td>
+    </tr>
+    }
+  </tbody>
+</table>
